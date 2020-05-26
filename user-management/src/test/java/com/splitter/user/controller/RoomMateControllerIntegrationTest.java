@@ -1,13 +1,14 @@
 package com.splitter.user.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +40,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		final RequestEntity<List<RoomMateDTO>> request = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.headers(headers)
+				.header("x-auth-token", getToken())
 				.body(users);
 		final ResponseEntity<List<User>> response = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
 				HttpMethod.POST, request, new ParameterizedTypeReference<List<User>>() {
@@ -65,7 +66,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		final ResponseEntity<User> signUpResponse = this.restTemplate.exchange(getBaseUrl() + "/api/signup",
 				HttpMethod.POST, signUpRequest, User.class);
 		
-		assertTrue(signUpResponse.getStatusCode().equals(HttpStatus.OK), () -> "signup failed");
+		assertTrue("signup failed", signUpResponse.getStatusCode().equals(HttpStatus.OK));
 		
 		/* add users */
 		HttpHeaders headers = new HttpHeaders();
@@ -81,12 +82,12 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		final RequestEntity<List<RoomMateDTO>> addRoomMatesRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.headers(headers)
+				.header("x-auth-token", getToken())
 				.body(users);
 		final ResponseEntity<List<User>> addRoomMatesResponse = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
 				HttpMethod.POST, addRoomMatesRequest, new ParameterizedTypeReference<List<User>>() {
 				});
-		assertTrue(addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK), () -> "adding users failed");
+		assertTrue("adding users failed", addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK));
 		
 		HttpEntity getRoomMateEntity = new HttpEntity(headers);
 		final ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}",
@@ -113,12 +114,12 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		final RequestEntity<List<RoomMateDTO>> addRoomMatesRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.headers(headers)
+				.header("x-auth-token", getToken())
 				.body(users);
 		final ResponseEntity<List<User>> addRoomMatesResponse = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
 				HttpMethod.POST, addRoomMatesRequest, new ParameterizedTypeReference<List<User>>() {
 				});
-		assertTrue(addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK), () -> "adding users failed");
+		assertTrue("adding users failed", addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK));
 		
 		/* check for room mate is present */
 		HttpEntity getRoomMateEntity = new HttpEntity(headers);
@@ -142,7 +143,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 				},
 				"2");
 		assertTrue(responseGet.getStatusCode().equals(HttpStatus.OK));
-		assertTrue(responseGet.getBody().isEmpty(), () -> "room mate is not deleted properly");
+		assertTrue("room mate is not deleted properly", responseGet.getBody().isEmpty());
 	}
 
 }

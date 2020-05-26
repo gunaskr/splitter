@@ -3,7 +3,8 @@ package com.splitter.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -12,15 +13,16 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.splitter.security.model.Authority;
 import com.splitter.security.service.JWTUserDetails;
 import com.splitter.security.service.TokenService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {Application.class}, 
 webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations="classpath:application-test.properties")
-//@Transactional("transactionManager")
+@TestPropertySource(locations="classpath:application-test.yml")
 public abstract class AbstractIntegrationTest {
 	
 	@LocalServerPort
@@ -35,7 +37,7 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     private MongoTemplate mongoTemplate;
     
-    @BeforeEach
+    @Before
     public void beforeTest() {
     	mongoTemplate.getDb().drop();
     }

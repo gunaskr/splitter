@@ -1,0 +1,15 @@
+---
+spring:
+ profiles: default
+ application:
+  name: user-management
+  cloud:
+    config:
+      uri: http://localhost:8001
+      failFast: true
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8010/eureka/
