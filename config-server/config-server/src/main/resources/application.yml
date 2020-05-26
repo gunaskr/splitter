@@ -10,7 +10,10 @@ spring:
  application:
   name: config-server
 server:
-  port: 8001
+  port: 8888
+health:
+ config:
+  enabled: false
 eureka:
   client:
     serviceUrl:
