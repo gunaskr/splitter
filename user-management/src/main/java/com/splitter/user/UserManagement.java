@@ -11,9 +11,10 @@ import com.splitter.security.SecurityCommonsConfiguration;
 @SpringBootApplication
 @Import(SecurityCommonsConfiguration.class)
 @EnableDiscoveryClient
-public class Application {
+public class UserManagement {
 
     public static void main(final String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(UserManagement.class, args);
 	}
+    
 }

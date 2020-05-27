@@ -20,7 +20,7 @@ import com.splitter.security.service.JWTUserDetails;
 import com.splitter.security.service.TokenService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {Application.class}, 
+@SpringBootTest(classes = {UserManagement.class}, 
 webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations="classpath:application-test.yml")
 public abstract class AbstractIntegrationTest {
