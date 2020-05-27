@@ -5,12 +5,13 @@ spring:
   config:
    server:
     git:
+     sslValidation: false
      uri: https://github.com/gunaskr/splitter
      searchPaths: application-configuration
  application:
   name: config-server
 server:
-  port: 8888
+  port: 0
 health:
  config:
   enabled: false

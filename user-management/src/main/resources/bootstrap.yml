@@ -3,10 +3,13 @@ spring:
  profiles: default
  application:
   name: user-management
-  cloud:
-    config:
-      uri: http://localhost:8001
-      failFast: true
+ cloud:
+  config:
+   enabled: true
+   discovery:
+    serviceId: config-server
+    enabled: true
+   failFast: true
 server:
   port: 0
 eureka:
