@@ -1,4 +1,4 @@
-package com.splitter.user;
+package com.splitter.transactionmanagement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +12,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.splitter.security.model.Authority;
 import com.splitter.security.service.JWTUserDetails;
 import com.splitter.security.service.TokenService;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {UserManagement.class}, 
+@SpringBootTest(classes = {TransactionManagementApplication.class}, 
 webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
 	

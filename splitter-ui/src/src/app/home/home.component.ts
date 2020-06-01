@@ -18,16 +18,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
-    const roomMateDto: RoomMateDTO = {
-      username: 'test 1',
-      mobileNo: '123456789',
-      addedBy: this.credentialService.credentials.username,
-      gender: RoomMateDTO.GenderEnum.FEMALE
-    }
     this.roomMateControllerService
-    .createRoomMatesUsingPOST([roomMateDto])
-    .subscribe(response => {
-      this.roomMateControllerService
       .getRoomMatesUsingGET(this.credentialService.credentials.username)
       .pipe(
         finalize(() => {
@@ -37,7 +28,6 @@ export class HomeComponent implements OnInit {
       .subscribe((users: User[]) => {
         this.users = users;
       });
-    })
     
   }
 }

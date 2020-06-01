@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { environment } from '@env/environment';
 import { Logger } from '../logger.service';
+import { Router } from '@angular/router';
 
 const log = new Logger('ErrorHandlerInterceptor');
 
@@ -15,6 +16,9 @@ const log = new Logger('ErrorHandlerInterceptor');
   providedIn: 'root',
 })
 export class ErrorHandlerInterceptor implements HttpInterceptor {
+
+  constructor(private router: Router){}
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError((error) => this.errorHandler(error)));
   }
@@ -23,6 +27,9 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   private errorHandler(response: HttpEvent<any>): Observable<HttpEvent<any>> {
     if (!environment.production) {
       // Do something with the error
+      if((response as any).status === 401){
+        this.router.navigate(['/login'], { replaceUrl: true });
+      }
       log.error('Request error', response);
     }
     throw response;

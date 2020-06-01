@@ -7,10 +7,6 @@ spring:
    database: project-test
 server:
  port: 8080
- cloud:
-  config:
-   enabled: false
-   failFast: false
 security:
  token:
   secret:

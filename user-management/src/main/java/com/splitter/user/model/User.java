@@ -3,6 +3,7 @@ package com.splitter.user.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.splitter.security.model.Authority;
 
 import java.util.Collection;
@@ -28,7 +29,8 @@ public class User extends BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-
+    
+    @JsonIgnore
     @Override
     public String getPassword() {
         return password;

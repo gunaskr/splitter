@@ -1,0 +1,18 @@
+---
+spring:
+ profiles: default
+ application:
+  name: transaction-management
+ cloud:
+  config:
+   enabled: true
+   discovery:
+    serviceId: config-server
+    enabled: true
+   failFast: true
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8010/eureka/

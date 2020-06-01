@@ -1,0 +1,36 @@
+---
+spring:
+ profiles: default
+ cloud:
+  service-registry:
+   auto-registration:
+    enabled: false
+  discovery:
+   enabled: false
+  serviceRegistry:
+   autoRegistration:
+    enabled: false
+  config:
+   discovery:
+    enabled: false
+   enabled: false
+ data:
+  mongodb:
+   host: localhost
+   port: 27017
+   database: project-test
+security:
+ token:
+  secret:
+   key: Asjfwol2asf123142Ags1k23hnSA36as6f4qQ324FEsvb
+storage:
+ path: ../temp/test-files
+server:
+  port: 0
+eureka:
+  client:
+   enabled: false
+   fetchRegistry: false
+   serviceUrl:
+    shouldFetchRegistry: false
+   registerWithEureka: false
