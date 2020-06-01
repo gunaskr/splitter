@@ -1,7 +1,6 @@
 package com.splitter.transactionmanagement.changelog;
 
 import org.bson.Document;
-import org.springframework.context.annotation.Profile;
 
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;

@@ -1,7 +1,6 @@
 package com.splitter.transactionmanagement.model;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class Event extends BaseEntity{
 	

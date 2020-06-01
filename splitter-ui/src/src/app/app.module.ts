@@ -17,6 +17,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BASE_PATH as BASE_PATH_USER_MANAGEMENT } from './user-management-client/variables';
 import { ApiModule  as ApiModuleUserManagement } from './user-management-client/api.module';
+import { RoommateModule } from './roommate/roommate.module';
 
 @NgModule({
   imports: [
@@ -31,9 +32,10 @@ import { ApiModule  as ApiModuleUserManagement } from './user-management-client/
     ShellModule,
     HomeModule,
     AboutModule,
+    RoommateModule,
     AuthModule,
+    ApiModuleUserManagement,
     AppRoutingModule, // must be imported as the last module as it contains the fallback route
-    ApiModuleUserManagement
   ],
   declarations: [AppComponent],
   providers: [

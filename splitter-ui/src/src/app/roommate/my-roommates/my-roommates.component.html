@@ -1,0 +1,32 @@
+<div class="roommate">
+    <h2>My Roommates</h2>
+<div class="roommate__list" [formGroup]="usersForm">
+    <h3>Roommates List</h3>
+    <button (click)="addUser()">Add New</button>
+    <table formArrayName="users" class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Gender</th>
+          <th scope="col">Phone No</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of usersForm.controls.users.controls; index as i" [formGroupName]="i">
+          <td>
+            <input type="text" class="form-control" formControlName="name">
+          </td>
+          <td>
+            <input type="text" class="form-control" formControlName="gender">
+          </td>
+          <td>
+            <input type="text" class="form-control" formControlName="mobileNo">
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      <button (click)="saveDetails()">Save Details</button>
+</div>
+</div>
