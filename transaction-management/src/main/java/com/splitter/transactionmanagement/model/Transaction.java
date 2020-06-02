@@ -7,23 +7,24 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 public class Transaction extends BaseEntity {
 	private static final long serialVersionUID = 8626899360367248309L;
 	
-	private User from;
-	private User to;
+	private String fromUserId;
+	private String toUserId;
 	private BigDecimal amount;
 	
 	@DBRef
 	private Event event;
-	public User getFrom() {
-		return from;
+	
+	public String getFromUserId() {
+		return fromUserId;
 	}
-	public void setFrom(User from) {
-		this.from = from;
+	public void setFromUserId(String fromUserId) {
+		this.fromUserId = fromUserId;
 	}
-	public User getTo() {
-		return to;
+	public String getToUserId() {
+		return toUserId;
 	}
-	public void setTo(User to) {
-		this.to = to;
+	public void setToUserId(String toUserId) {
+		this.toUserId = toUserId;
 	}
 	public Event getEvent() {
 		return event;

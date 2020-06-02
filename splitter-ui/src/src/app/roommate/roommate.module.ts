@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RoommateRoutingModule } from './roommate-routing.module';
 import { MyRoommatesComponent } from './my-roommates/my-roommates.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '@app/@shared';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     RoommateRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [MyRoommatesComponent]
 })

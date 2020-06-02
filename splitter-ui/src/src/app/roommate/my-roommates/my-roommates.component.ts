@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomMateControllerService, User, RoomMateDTO } from '@app/user-management-client';
 import { CredentialsService } from '@app/auth';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-my-roommates',
@@ -12,27 +12,29 @@ export class MyRoommatesComponent implements OnInit {
 
   users: User[];
   usersForm: FormGroup;
+  isLoading = true;
 
   constructor(private roomMateController: RoomMateControllerService,
     private credentialService: CredentialsService,
     private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    this.usersForm = this.formBuilder.group({
-      users: this.formBuilder.array([ this.createUserGroup() ])
-    })
     this.roomMateController.getRoomMatesUsingGET(this.credentialService.credentials.username)
     .subscribe(users => {
       this.users = users;
+      const userFormGroups = users.map(user => this.createUserGroup(user));
+      this.usersForm = this.formBuilder.group({
+        users: this.formBuilder.array(userFormGroups)
+      });
+      this.isLoading = false;
     })
   }
 
-  createUserGroup(isEditable = true): FormGroup {
+  createUserGroup(user?: User): FormGroup {
     return this.formBuilder.group({
-      name: '',
-      gender: '',
-      mobileNo: '',
-      editable: isEditable
+      name: user ? new FormControl({value: user.username, disabled: true}) : '',
+      gender: user ? new FormControl({value: user.gender, disabled: true}) : '',
+      mobileNo: user ? new FormControl({value: user.mobileNo, disabled: true}) : ''
     });
   }
 
@@ -41,11 +43,44 @@ export class MyRoommatesComponent implements OnInit {
     users.push(this.createUserGroup());
   }
 
-  saveDetails(){
+  saveDetails() {
+    this.isLoading = true;
     const users = this.usersForm.get('users') as FormArray;
-    console.log(users.value);
+    const formGroupsToSave: FormGroup[] = []
+    users.controls.forEach(control => {
+      if((control as FormGroup).dirty){
+        formGroupsToSave.push((control as FormGroup));
+      }
+    });
     const roomMates: RoomMateDTO[] = [];
-    this.roomMateController.createRoomMatesUsingPOST(roomMates);
+    formGroupsToSave.forEach(formGroup => {
+      roomMates.push({
+        username: formGroup.value.name,
+        gender: formGroup.value.gender as RoomMateDTO.GenderEnum,
+        mobileNo: formGroup.value.mobileNo,
+        addedBy: this.credentialService.credentials.username
+      })
+    })
+    this.roomMateController.createRoomMatesUsingPOST(roomMates)
+    .subscribe(response => {
+      users.markAsPristine();
+      formGroupsToSave.forEach(formGroup => {
+        formGroup.disable();
+      });
+      this.isLoading = false;
+    })
+  }
+
+  deleteUser(index: number){
+    this.isLoading = true;
+    const users = this.usersForm.get('users') as FormArray;
+    const mobileNo = users.at(index).value.mobileNo;
+    this.roomMateController.deleteRoomMateUsingDELETE(this.credentialService.credentials.username,
+      mobileNo)
+      .subscribe(response => {
+        users.removeAt(index);
+        this.isLoading = false;
+      });
   }
 
 }

@@ -9,12 +9,21 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Event } from './event';
 import { TransactionVO } from './transactionVO';
 
 
 export interface EventVO { 
-    event?: Event;
-    transacionVOs?: Array<TransactionVO>;
-    transactionRequests?: Array<TransactionVO>;
+    amountSpent?: number;
+    category?: EventVO.CategoryEnum;
+    id?: string;
+    name?: string;
+    transactions?: Array<TransactionVO>;
+    userId?: string;
+}
+export namespace EventVO {
+    export type CategoryEnum = 'FOOD' | 'TRAVEL';
+    export const CategoryEnum = {
+        FOOD: 'FOOD' as CategoryEnum,
+        TRAVEL: 'TRAVEL' as CategoryEnum
+    };
 }

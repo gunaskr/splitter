@@ -1,8 +1,13 @@
-<div class="roommate">
+<div class="container">
     <h2>My Roommates</h2>
-<div class="roommate__list" [formGroup]="usersForm">
+<app-loader [isLoading]="isLoading"></app-loader>
+<br>
+<div class="roommate__list" *ngIf="usersForm" [formGroup]="usersForm">
     <h3>Roommates List</h3>
-    <button (click)="addUser()">Add New</button>
+    <br>
+    <button type="button" class="btn btn-primary" (click)="addUser()">Add New</button>
+    <br>
+    <br>
     <table formArrayName="users" class="table table-striped">
         <thead>
         <tr>
@@ -13,20 +18,26 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let user of usersForm.controls.users.controls; index as i" [formGroupName]="i">
+        <tr *ngFor="let user of usersForm?.controls?.users?.controls; index as i" [formGroupName]="i">
           <td>
             <input type="text" class="form-control" formControlName="name">
           </td>
           <td>
-            <input type="text" class="form-control" formControlName="gender">
+            <select id="gender" class="form-control" formControlName="gender">
+              <option value="FEMALE">FEMALE</option>
+              <option value="MALE">MALE</option>
+            </select>
           </td>
           <td>
             <input type="text" class="form-control" formControlName="mobileNo">
           </td>
-          <td></td>
+          <td>
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteUser(i)" >Delete</button>
+          </td>
         </tr>
         </tbody>
       </table>
-      <button (click)="saveDetails()">Save Details</button>
+      <br>
+      <button type="button" class="btn btn-primary" (click)="saveDetails()">Save Details</button>
 </div>
 </div>

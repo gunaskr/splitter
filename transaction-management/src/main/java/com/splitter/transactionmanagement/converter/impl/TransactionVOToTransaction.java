@@ -20,8 +20,8 @@ public class TransactionVOToTransaction implements Converter<TransactionVO, Tran
 		final Transaction transaction = new Transaction();
 		transaction.setEvent(event);
 		transaction.setAmount(source.getAmount());
-		transaction.setFrom(source.getFrom());
-		transaction.setTo(source.getTo());
+		transaction.setFromUserId(source.getFromUserId());
+		transaction.setToUserId(source.getToUserId());
 		return transaction;
 	}
 

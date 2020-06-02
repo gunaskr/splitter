@@ -13,8 +13,8 @@ public class TransactionToTransactionVO implements Converter<Transaction, Transa
 	public TransactionVO convert(final Transaction source) {
 		final TransactionVO transactionVO = new TransactionVO();
 		transactionVO.setAmount(source.getAmount());
-		transactionVO.setFrom(source.getFrom());
-		transactionVO.setTo(source.getTo());
+		transactionVO.setFromUserId(source.getFromUserId());
+		transactionVO.setToUserId(source.getToUserId());
 		return transactionVO;
 	}
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.splitter.transactionmanagement.controller.dto.EventVO;
-import com.splitter.transactionmanagement.converter.impl.EventVOToTransactions;
 import com.splitter.transactionmanagement.service.EventService;
 
 @RestController
@@ -23,8 +22,7 @@ public class EventController {
 	private final EventService eventService;
 	
 	@Autowired
-	public EventController(EventVOToTransactions eventVOToTransactions,
-			EventService eventService) {
+	public EventController(final EventService eventService) {
 		super();
 		this.eventService = eventService;
 	}

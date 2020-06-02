@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { User } from './user';
 
 
 export interface TransactionVO { 
     amount?: number;
-    from?: User;
-    to?: User;
+    fromUserId?: string;
+    id?: string;
+    toUserId?: string;
 }

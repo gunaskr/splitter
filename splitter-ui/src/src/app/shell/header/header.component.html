@@ -13,13 +13,14 @@
     </button>
     <div id="navbar-menu" class="collapse navbar-collapse float-xs-none" [ngbCollapse]="menuHidden">
       <div class="navbar-nav">
-        <a class="nav-item nav-link text-uppercase" routerLink="/home" routerLinkActive="active">
-          <i class="fas fa-home"></i>
+        <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">
           <span translate>Home</span>
         </a>
-        <a class="nav-item nav-link text-uppercase" routerLink="/roommate" routerLinkActive="active">
-          <i class="fas fa-question-circle"></i>
+        <a class="nav-item nav-link" routerLink="/roommate" routerLinkActive="active">
           <span translate>My Roommates</span>
+        </a>
+        <a class="nav-item nav-link" routerLink="/transaction" routerLinkActive="active">
+          <span translate>Add New Transaction</span>
         </a>
       </div>
       <div class="navbar-nav ml-auto">

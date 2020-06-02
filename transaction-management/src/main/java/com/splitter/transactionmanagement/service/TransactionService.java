@@ -27,7 +27,7 @@ public class TransactionService {
 
 
 	public List<TransactionVO> getTransactions(final String owedBy, final String owedTo){
-		final List<Transaction> transactions = transactionRepository.findByFromMobileNoOrToMobileNo(owedBy, owedTo);
+		final List<Transaction> transactions = transactionRepository.findByFromUserIdOrToUserId(owedBy, owedTo);
 		
 		return transactions.stream().map(transaction -> transactionToTransactionVO.convert(transaction)).collect(Collectors.toList());
 	}

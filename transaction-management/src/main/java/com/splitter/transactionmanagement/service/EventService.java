@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.splitter.transactionmanagement.controller.dto.EventVO;
-import com.splitter.transactionmanagement.converter.impl.EventVOToTransactions;
-import com.splitter.transactionmanagement.converter.impl.TransactionsToEventVO;
+import com.splitter.transactionmanagement.converter.impl.EventToEventVO;
+import com.splitter.transactionmanagement.converter.impl.EventVOToEvent;
+import com.splitter.transactionmanagement.converter.impl.TransactionToTransactionVO;
+import com.splitter.transactionmanagement.converter.impl.TransactionVOToTransaction;
 import com.splitter.transactionmanagement.model.Event;
 import com.splitter.transactionmanagement.model.Transaction;
 import com.splitter.transactionmanagement.repository.EventRepository;
@@ -21,33 +23,40 @@ import com.splitter.transactionmanagement.repository.TransactionRepository;
 public class EventService {
 	
 	private final TransactionRepository transactionRepository;
-	private final EventVOToTransactions eventVOToTransactions;
-	private final TransactionsToEventVO transactionsToEventVO;
 	private final EventRepository eventRepository;
+	private final EventVOToEvent eventVOToEvent;
+	private final EventToEventVO eventToEventVO;
+	private final TransactionToTransactionVO transactionToTransactionVO;
 	
 	@Autowired
 	public EventService(final TransactionRepository transactionRepository,
-			final EventVOToTransactions eventVOToTransactions,
-			final TransactionsToEventVO transactionsToEventVO,
-			final EventRepository eventRepository) {
+			final EventRepository eventRepository,
+			final EventVOToEvent eventVOToEvent,
+			final EventToEventVO eventToEventVO,
+			final TransactionToTransactionVO transactionToTransactionVO) {
 		super();
 		this.transactionRepository = transactionRepository;
-		this.eventVOToTransactions = eventVOToTransactions;
-		this.transactionsToEventVO = transactionsToEventVO;
 		this.eventRepository = eventRepository;
+		this.eventVOToEvent = eventVOToEvent;
+		this.eventToEventVO = eventToEventVO;
+		this.transactionToTransactionVO = transactionToTransactionVO;
 	}
 	
 	//TODO works when we use replica set @Transactional
 	public EventVO createEvent(final EventVO eventRequest) {
-		final Event savedEvent = eventRepository.save(eventRequest.getEvent());
-		eventRequest.setEvent(savedEvent);
-		final List<Transaction> transactions = eventVOToTransactions.convert(eventRequest);
+		final Event savedEvent = eventRepository.save(eventVOToEvent.convert(eventRequest));
+		
+		final TransactionVOToTransaction transactionRequestToTransaction = new TransactionVOToTransaction(savedEvent);
+		final List<Transaction> transactions = eventRequest.getTransactions().stream().map(transactionRequestToTransaction::convert).collect(Collectors.toList());
 		List<Transaction> savedTransactions = transactionRepository.saveAll(transactions);
-		return transactionsToEventVO.convert(savedTransactions);
+		
+		final EventVO savedEventVO = eventToEventVO.convert(savedEvent);
+		savedEventVO.setTransactions(savedTransactions.stream().map(transactionToTransactionVO::convert).collect(Collectors.toList()));
+		return savedEventVO;
 	}
 
 	public List<EventVO> getEventsByMobileNo(String mobileNo) {
-		List<Event> events = eventRepository.findByUserMobileNo(mobileNo);
+		List<Event> events = eventRepository.findByUserId(mobileNo);
 		
 		List<ObjectId> collect = events.stream().map((e) -> {
 			return new ObjectId(e.getId());
@@ -58,7 +67,9 @@ public class EventService {
 		}));
 		final List<EventVO> eventVOs = new ArrayList<>();
 		transactionsByEventId.forEach((key, value) -> {
-			eventVOs.add(transactionsToEventVO.convert(value));
+			final EventVO savedEventVO = eventToEventVO.convert(value.get(0).getEvent());
+			savedEventVO.setTransactions(value.stream().map(transactionToTransactionVO::convert).collect(Collectors.toList()));
+			eventVOs.add(savedEventVO);
 		});
 		return eventVOs;
 	}

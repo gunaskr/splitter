@@ -15,6 +15,6 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 	@Query("{'event.$id' : {$in: ?0 }}")
 	List<Transaction> findByEventIn(List<ObjectId> collect);
 
-	List<Transaction> findByFromMobileNoOrToMobileNo(String owedBy, String owedTo);
+	List<Transaction> findByFromUserIdOrToUserId(String owedBy, String owedTo);
 
 }

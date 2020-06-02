@@ -1,0 +1,22 @@
+<div class="container transactions">
+    <h2>Transactions</h2>
+    <br>
+    <h3 class="transactions__heading">{{ userMobileNo }}</h3>
+    <div class="transactions__table">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col" sortable="username" (sort)="onSort($event)">Transaction By</th>
+              <th scope="col" sortable="category" (sort)="onSort($event)">Category</th>
+              <th scope="col" sortable="createdAt" (sort)="onSort($event)">Transaction Date</th>
+              <th scope="col" sortable="createdAt" (sort)="onSort($event)">Transaction Amount</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let event of events">
+            </tr>
+            </tbody>
+          </table>
+    </div>
+</div>

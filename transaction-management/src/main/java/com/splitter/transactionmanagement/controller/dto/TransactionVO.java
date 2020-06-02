@@ -2,29 +2,34 @@ package com.splitter.transactionmanagement.controller.dto;
 
 import java.math.BigDecimal;
 
-import com.splitter.transactionmanagement.model.User;
-
 public class TransactionVO {
-	private User from;
-	private User to;
+	private String id;
+	private String fromUserId;
+	private String toUserId;
 	private BigDecimal amount;
-	public User getFrom() {
-		return from;
-	}
-	public void setFrom(User from) {
-		this.from = from;
-	}
-	public User getTo() {
-		return to;
-	}
-	public void setTo(User to) {
-		this.to = to;
-	}
 	public BigDecimal getAmount() {
 		return amount;
 	}
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getFromUserId() {
+		return fromUserId;
+	}
+	public void setFromUserId(String fromUserId) {
+		this.fromUserId = fromUserId;
+	}
+	public String getToUserId() {
+		return toUserId;
+	}
+	public void setToUserId(String toUserId) {
+		this.toUserId = toUserId;
 	}
 	
 }

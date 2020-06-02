@@ -17,7 +17,10 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BASE_PATH as BASE_PATH_USER_MANAGEMENT } from './user-management-client/variables';
 import { ApiModule  as ApiModuleUserManagement } from './user-management-client/api.module';
+import { BASE_PATH as BASE_PATH_TRANSACTION_MANAGEMENT } from './transaction-management-client/variables';
+import { ApiModule  as ApiModuleTransactionManagement } from './transaction-management-client/api.module';
 import { RoommateModule } from './roommate/roommate.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @NgModule({
   imports: [
@@ -33,8 +36,10 @@ import { RoommateModule } from './roommate/roommate.module';
     HomeModule,
     AboutModule,
     RoommateModule,
+    TransactionModule,
     AuthModule,
     ApiModuleUserManagement,
+    ApiModuleTransactionManagement,
     AppRoutingModule, // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
@@ -42,6 +47,10 @@ import { RoommateModule } from './roommate/roommate.module';
     {
       provide: BASE_PATH_USER_MANAGEMENT,
       useValue: 'user-management'
+    },
+    {
+      provide: BASE_PATH_TRANSACTION_MANAGEMENT,
+      useValue: 'transaction-management'
     }
   ],
   bootstrap: [AppComponent],

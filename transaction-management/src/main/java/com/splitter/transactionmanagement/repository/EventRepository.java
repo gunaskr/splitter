@@ -8,6 +8,6 @@ import com.splitter.transactionmanagement.model.Event;
 
 public interface EventRepository extends MongoRepository<Event, String> {
 
-	List<Event> findByUserMobileNo(String mobileNo);
+	List<Event> findByUserId(String mobileNo);
 
 }
