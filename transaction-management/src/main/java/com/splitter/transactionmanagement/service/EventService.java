@@ -55,13 +55,21 @@ public class EventService {
 		return savedEventVO;
 	}
 
-	public List<EventVO> getEventsByMobileNo(String mobileNo) {
-		List<Event> events = eventRepository.findByUserId(mobileNo);
+	public EventVO findEventById(String eventId) {
+		final List<Transaction> transactions = transactionRepository.findByEventId(new ObjectId(eventId));
 		
-		List<ObjectId> collect = events.stream().map((e) -> {
-			return new ObjectId(e.getId());
-		} ).collect(Collectors.toList());
-		List<Transaction> transactions = transactionRepository.findByEventIn(collect);
+		if(transactions.isEmpty()) {
+			return null;
+		}
+		
+		final EventVO savedEventVO = eventToEventVO.convert(transactions.get(0).getEvent());
+		savedEventVO.setTransactions(transactions.stream().map(transactionToTransactionVO::convert).collect(Collectors.toList()));
+		
+		return savedEventVO;
+	}
+
+	public  List<EventVO> filterEvents(String fromUserId, String toUserId) {
+		List<Transaction> transactions = transactionRepository.findByFromUserIdOrToUserId(fromUserId, toUserId);
 		Map<String, List<Transaction>> transactionsByEventId = transactions.stream().collect(Collectors.groupingBy((t) -> {
 		 return t.getEvent().getId();
 		}));

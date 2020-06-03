@@ -1,6 +1,75 @@
-<div class="container-fluid">
-  <div class="jumbotron text-center">
-    <app-loader [isLoading]="isLoading"></app-loader>
-    <q [hidden]="isLoading">{{ users | json }}</q>
+<div class="home container">
+  <h2>My Dashboard</h2>
+  <div class="row container">
+    <label for="mobileNo" class="col-sm-2 offset-sm-5 col-form-label">Mobile Number</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="mobileNo" placeholder="Enter Your Mobile Number">
+    </div>
+    <button class="btn btn-success col-sm-1">GO</button>
   </div>
+  <br>
+  <div class="home__container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="home__owe col-sm-4 offset-sm-4">
+          <span class="home__owe__text">YOU OWE</span>
+          <hr>
+          <span class="home__owe__amount">{{totalDebitAmount | currency}}</span>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-primary" id="result_panel">
+          <div class="panel-heading">
+            <h5 class="panel-title">Roommates YOU OWE</h5>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item"
+              *ngFor="let transaction of debitTransactions">
+              <div class="row">
+                <div class="col-sm-6">
+                  {{transaction.toUserId}}
+                </div>
+                <div class="col-sm-4">
+                  {{transaction.amount | currency }}
+                </div>
+                <i routerLink="/transactions" class="col-sm-1 offset-sm-1 fas fa-ellipsis-v"></i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="home__owe home__owe--credit col-sm-4 offset-sm-4">
+          <span class="home__owe__text">OWE YOU</span>
+          <hr>
+          <span class="home__owe__amount">{{totalCreditAmount | currency}}</span>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-primary" id="result_panel">
+          <div class="panel-heading">
+            <h5 class="panel-title">Roommates OWE YOU</h5>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item"
+              *ngFor="let transaction of creditTransactions">
+              <div class="row">
+                <div class="col-sm-6">
+                  {{transaction.fromUserId}}
+                </div>
+                <div class="col-sm-4">
+                  {{transaction.amount | currency }}
+                </div>
+                <i routerLink="/transactions" class="col-sm-1 offset-sm-1 fas fa-ellipsis-v"></i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
 </div>

@@ -1,11 +1,13 @@
 package com.splitter.transactionmanagement.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -80,18 +82,15 @@ public class EventControllerTest extends AbstractIntegrationTest {
 	}
 	
 	@Test
-	public void testGetEventsByMobileNumber() {
+	public void testFindEventById() {
 		String user1 = "1";
-		
 		String user2 = "2";
-		
 		String user3 = "3";
-		
-		
 		Event event1 = new Event();
 		event1.setAmountSpent(BigDecimal.valueOf(100));
 		event1.setCategory(CategoryType.FOOD);
 		event1.setUserId(user1);
+		event1.setName("event1");
 		
 		Event savedEvent1 = eventRepository.save(event1);
 		
@@ -132,12 +131,20 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken());
-		HttpEntity getRoomMateEntity = new HttpEntity(headers);
-		final ResponseEntity<List<EventVO>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/event/{mobileNo}",
-				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<EventVO>>() {
+		HttpEntity entityWithHeader = new HttpEntity(headers);
+		final ResponseEntity<EventVO> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/event/{eventId}",
+				HttpMethod.GET, entityWithHeader, new ParameterizedTypeReference<EventVO>() {
 				},
-				user1);
+				savedEvent1.getId());
 		assertTrue(responseGet.getStatusCode().equals(HttpStatus.OK));
-		assertTrue(responseGet.getBody().size() == 1);
+		assertEquals("event is not same", "event1", responseGet.getBody().getName());
+		assertEquals("transaction size is not ame", 2, responseGet.getBody().getTransactions().size());
+		
+		final ResponseEntity<List<EventVO>> responseFilter = this.restTemplate.exchange(getBaseUrl() + "/api/event?fromUserId={fromUserId}&toUserId={toUserId}",
+				HttpMethod.GET, entityWithHeader, new ParameterizedTypeReference<List<EventVO>>() {
+				},
+				user1, user1);
+		assertTrue(responseFilter.getStatusCode().equals(HttpStatus.OK));
+		assertEquals("events size is not same", 2, responseFilter.getBody().size());
 	}
 }

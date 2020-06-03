@@ -1,6 +1,19 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Amount Mismatch</h4>
+    </div>
+    <div class="modal-body">
+        <p>The amount requested from all room mates, doesn't match the total amount. Are you sure, you want to continue?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-sm" (click)="modal.close('continue')">Continue</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-danger btn-sm" (click)="modal.close('cancel')">Cancel</button>
+    </div>
+</ng-template>
 <div class="container">
     <h2>Add New Transaction</h2>
-    <div class="transaction__form" [formGroup]="eventForm">
+    <div *ngIf="eventForm" class="transaction__form" [formGroup]="eventForm">
         <div class="form-group row">
             <label for="expenseCategory" class="col-sm-2 col-form-label">Expense Category</label>
             <div class="col-sm-6">
@@ -20,7 +33,7 @@
             <label for="transactionDate" class="col-sm-2 col-form-label">Transaction Date</label>
             <div class="col-sm-6">
                 <input type="transactionDate" id="business_incorp_date" class="form-control"
-                    formControlName="transactionDate" ngbDatepicker #transactionDatePicker="ngbDatepicker"
+                    ngbDatepicker #transactionDatePicker="ngbDatepicker"
                     (click)="transactionDatePicker.toggle()">
             </div>
         </div>
@@ -42,14 +55,14 @@
             <label for="amountSpent" class="col-sm-2 col-form-label">Split Equaly</label>
             <div class="col-sm-6">
                 <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                    <input type="checkbox" [disabled]="eventForm.get('amountSpent').invalid" (change)="onChangeSplitOption($event)"  class="custom-control-input" id="customSwitch1">
                     <label class="custom-control-label" for="customSwitch1"></label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 offset-sm-2">
-                <table formArrayName="transactions" class="table table-striped">
+                <table formArrayName="transactions" class="table table-bordered table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -76,18 +89,21 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fa fa-times-circle transaction__icon"></i>
+                                <i class="fa fa-times-circle transaction__icon" (click)="removeTransaction(i)"></i>
                             </td>
+                        </tr>
+                        <tr>
+                            <i class="fa fa-plus-circle transaction__icon" (click)="addTransaction()" aria-hidden="true"></i>
                         </tr>
                     </tbody>
                 </table>
-                <i class="fa fa-plus-circle transaction__icon" (click)="addTransaction()" aria-hidden="true"></i>
+                
             </div>
         </div>
         <div class="row">
-            <button type="button" class="btn btn-primary col-sm-2" (click)="saveExpense()">Save Expense</button>
+            <button type="button" class="btn btn-primary col-sm-2" [disabled]="eventForm.pristine || eventForm.invalid" (click)="validateAndSaveExpense()">Save Expense</button>
             &nbsp;&nbsp;
-            <button type="button" class="btn btn-secondary col-sm-2" (click)="resetForm()">Reset</button>
+            <button type="button" class="btn btn-secondary col-sm-2" (click)="eventForm.reset()">Reset</button>
         </div>
     </div>
 </div>

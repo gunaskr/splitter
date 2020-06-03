@@ -2,7 +2,10 @@ package com.splitter.transactionmanagement.controller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +37,11 @@ public class TransactionController {
 			throw new RuntimeException("bad request");
 		}
 		return new ResponseEntity<>(transactionService.getTransactions(owedBy, owedTo), HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, path="/{transactionId}")
+	public void deleteTransactionById(@PathVariable final String transactionId) {
+		transactionService.deleteTransactionById(transactionId);
 	}
 
 }

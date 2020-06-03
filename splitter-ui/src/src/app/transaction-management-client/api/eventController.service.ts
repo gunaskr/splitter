@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class EventControllerService {
 
-    protected basePath = 'https://localhost:65210';
+    protected basePath = 'https://localhost:8080/transaction-management';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -109,19 +109,26 @@ export class EventControllerService {
     }
 
     /**
-     * getAllEventsByUser
+     * filterEvents
      * 
-     * @param mobileNo mobileNo
+     * @param fromUserId fromUserId
+     * @param toUserId toUserId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllEventsByUserUsingGET(mobileNo: string, observe?: 'body', reportProgress?: boolean): Observable<Array<EventVO>>;
-    public getAllEventsByUserUsingGET(mobileNo: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EventVO>>>;
-    public getAllEventsByUserUsingGET(mobileNo: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EventVO>>>;
-    public getAllEventsByUserUsingGET(mobileNo: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public filterEventsUsingGET(fromUserId?: string, toUserId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<EventVO>>;
+    public filterEventsUsingGET(fromUserId?: string, toUserId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EventVO>>>;
+    public filterEventsUsingGET(fromUserId?: string, toUserId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EventVO>>>;
+    public filterEventsUsingGET(fromUserId?: string, toUserId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (mobileNo === null || mobileNo === undefined) {
-            throw new Error('Required parameter mobileNo was null or undefined when calling getAllEventsByUserUsingGET.');
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (fromUserId !== undefined && fromUserId !== null) {
+            queryParameters = queryParameters.set('fromUserId', <any>fromUserId);
+        }
+        if (toUserId !== undefined && toUserId !== null) {
+            queryParameters = queryParameters.set('toUserId', <any>toUserId);
         }
 
         let headers = this.defaultHeaders;
@@ -144,7 +151,54 @@ export class EventControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<EventVO>>(`${this.basePath}/api/event/${encodeURIComponent(String(mobileNo))}`,
+        return this.httpClient.get<Array<EventVO>>(`${this.basePath}/api/event`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * findEventById
+     * 
+     * @param eventId eventId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findEventByIdUsingGET(eventId: string, observe?: 'body', reportProgress?: boolean): Observable<EventVO>;
+    public findEventByIdUsingGET(eventId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EventVO>>;
+    public findEventByIdUsingGET(eventId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EventVO>>;
+    public findEventByIdUsingGET(eventId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (eventId === null || eventId === undefined) {
+            throw new Error('Required parameter eventId was null or undefined when calling findEventByIdUsingGET.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (x-auth-token) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["x-auth-token"]) {
+            headers = headers.set('x-auth-token', this.configuration.apiKeys["x-auth-token"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<EventVO>(`${this.basePath}/api/event/${encodeURIComponent(String(eventId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

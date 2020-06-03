@@ -32,4 +32,7 @@ public class TransactionService {
 		return transactions.stream().map(transaction -> transactionToTransactionVO.convert(transaction)).collect(Collectors.toList());
 	}
 
+	public void deleteTransactionById(String transactionId) {
+		transactionRepository.deleteById(transactionId);
+	}
 }

@@ -16,5 +16,8 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 	List<Transaction> findByEventIn(List<ObjectId> collect);
 
 	List<Transaction> findByFromUserIdOrToUserId(String owedBy, String owedTo);
+	
+	@Query("{'event.$id' : ?0 }")
+	List<Transaction> findByEventId(ObjectId eventId);
 
 }

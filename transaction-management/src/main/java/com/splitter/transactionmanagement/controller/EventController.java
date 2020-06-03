@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.splitter.transactionmanagement.controller.dto.EventVO;
@@ -32,9 +33,18 @@ public class EventController {
 		return new ResponseEntity<>(eventService.createEvent(eventRequest), HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, path="/{mobileNo}")
-	public ResponseEntity<List<EventVO>> getAllEventsByUser(@PathVariable final String mobileNo) {
-		return new ResponseEntity<>(eventService.getEventsByMobileNo(mobileNo), HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<EventVO>> filterEvents(@RequestParam(required = false) final String fromUserId,
+			@RequestParam(required = false) final String toUserId) {
+		if(fromUserId == null && toUserId == null) {
+			throw new RuntimeException("bad request");
+		}
+		return new ResponseEntity<>(eventService.filterEvents(fromUserId, toUserId), HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path="/{eventId}")
+	public ResponseEntity<EventVO> findEventById(@PathVariable final String eventId) {
+		return new ResponseEntity<>(eventService.findEventById(eventId), HttpStatus.OK);
 	}
 
 }

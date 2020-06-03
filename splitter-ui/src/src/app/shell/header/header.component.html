@@ -19,7 +19,7 @@
         <a class="nav-item nav-link" routerLink="/roommate" routerLinkActive="active">
           <span translate>My Roommates</span>
         </a>
-        <a class="nav-item nav-link" routerLink="/transaction" routerLinkActive="active">
+        <a class="nav-item nav-link" [routerLink]="['/transaction', '']" routerLinkActive="active">
           <span translate>Add New Transaction</span>
         </a>
       </div>

@@ -1,9 +1,38 @@
-.logo {
-  width: 100px;
+.home__owe{
+  background-color: #28a745;
+  border-radius: 75%;
+  width: 150px;
+  min-height: 150px;
+  color: white;
+  font-size: medium;
+  font-weight: bold;
+  &--credit{
+    background-color: rgb(70, 154, 223);
+  }
+  span{
+    position: relative;
+    left: 21%;
+  }
+  &__text{
+    top: 25px;
+  }
+  &__amount{
+    top:25px;
+  }
+  hr{
+    position: relative;
+    top: 25px;
+  }
+}
+.list-group{
+  max-height: 200px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
-q {
-  font-style: italic;
-  font-size: 1.2rem;
-  quotes: "« " " »";
+.home__container{
+  border: 1px solid rgba(133, 212, 226, 0.877);
+    box-shadow: 4px 4px 4px #ccc;
+    padding: 5px;
 }
