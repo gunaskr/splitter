@@ -1,23 +1,27 @@
-<div class="container">
-    <h2>My Roommates</h2>
 <app-loader [isLoading]="isLoading"></app-loader>
-<br>
-<div class="roommate__list" *ngIf="usersForm" [formGroup]="usersForm">
-    <h3>Roommates List</h3>
+<div class="container">
+  <h2>My Roommates</h2>
+  <br>
+  <div class="roommate__list splitter__container" *ngIf="usersForm" [formGroup]="usersForm">
+    <div class="row">
+      <h4 class="col-sm-3" >Roommates List</h4>
+      <button type="button" class="col-sm-1 offset-sm-7 btn btn-sm btn-success" (click)="addUser()"><i
+          class="fas fa-plus"></i>Add New</button>
+    </div>
+    
     <br>
-    <button type="button" class="btn btn-primary" (click)="addUser()">Add New</button>
     <br>
     <br>
-    <table formArrayName="users" class="table table-striped">
-        <thead>
+    <table formArrayName="users" class="table table-bordered">
+      <thead>
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Gender</th>
           <th scope="col">Phone No</th>
           <th scope="col">Actions</th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         <tr *ngFor="let user of usersForm?.controls?.users?.controls; index as i" [formGroupName]="i">
           <td>
             <input type="text" class="form-control" formControlName="name">
@@ -32,12 +36,14 @@
             <input type="text" class="form-control" formControlName="mobileNo">
           </td>
           <td>
-            <button type="button" class="btn btn-danger btn-sm" (click)="deleteUser(i)" >Delete</button>
+            <i *ngIf="user.value.id"class="fas fa-edit"></i>
+            &nbsp;
+            <i class="fas fa-times-circle" (click)="deleteUser(i)"></i>
           </td>
         </tr>
-        </tbody>
-      </table>
-      <br>
-      <button type="button" class="btn btn-primary" (click)="saveDetails()">Save Details</button>
-</div>
+      </tbody>
+    </table>
+    <br>
+    <button type="button" class="btn btn-success" (click)="saveDetails()">Save Details</button>
+  </div>
 </div>

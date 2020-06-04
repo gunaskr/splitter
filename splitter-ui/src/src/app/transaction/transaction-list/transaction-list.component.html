@@ -2,7 +2,7 @@
   <h2>Transactions</h2>
   <br>
   <h3 class="transactions__heading">{{ userMobileNo }}</h3>
-  <div class="transactions__container">
+  <div class="splitter__container">
     <br>
     <table class="transactions__table col-sm-10 offset-sm-1 table table-bordered">
       <thead>
@@ -19,14 +19,16 @@
         <ng-container *ngFor="let event of events; index as i">
           <tr>
             <td>
-              <i *ngIf=" ! showRow(i)" class="fa fa-plus-circle transactions__icon" (click)="expandRow(i)" aria-hidden="true"></i>
-              <i *ngIf="showRow(i)" class="fas fa-minus-circle transactions__icon" (click)="expandRow(i)" ></i>
+              <i *ngIf=" ! showRow(i)" class="fa fa-plus-circle transactions__icon" (click)="expandRow(i)"
+                aria-hidden="true"></i>
+              <i *ngIf="showRow(i)" class="fas fa-minus-circle transactions__icon" (click)="expandRow(i)"></i>
             </td>
-            <td>{{ event.userId | number }}</td>
+            <td><span>{{getUserName(event.userId)}}</span><span>(({{event.userId | slice:0:3}})
+                {{event.userId | slice:3:6}}-{{event.userId | slice:6:9}})</span></td>
             <td>{{ event.category }}</td>
             <td>{{ event.createdAt | date }}</td>
             <td>{{ event.amountSpent | currency }}</td>
-            <td><i class="fas fa-edit transactions__icon"></i></td>
+            <td><i class="fas fa-edit transactions__icon" [routerLink]="['/transaction', event.id]"></i></td>
           </tr>
           <tr *ngIf="showRow(i)">
             <td colspan="12">
@@ -36,22 +38,22 @@
                     <h5 class="card-title">{{event.name}}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Participants</h6>
                     <ul class="list-group list-group-flush">
-                      <li class="list-group-item" 
-                      [ngClass]="{'active' : isCurrentUser(transaction.fromUserId)}"
-                      *ngFor="let transaction of event.transactions">
-                        <div class="row">
-                          <div class="col-sm-6">
-                            {{transaction.fromUserId}}
+                      <ng-container *ngFor="let transaction of event.transactions">
+                        <li class="list-group-item" [ngClass]="{'active' : isCurrentUser(transaction.fromUserId)}"
+                          *ngIf="!(transaction.fromUserId === event.userId)">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              {{getUserName(transaction.fromUserId)}}
+                            </div>
+                            <div class="col-sm-4">
+                              {{transaction.amount | currency }}
+                            </div>
                           </div>
-                          <div class="col-sm-4">
-                            {{transaction.amount | currency }}
-                          </div>
-                        </div>
-                      </li>
+                        </li>
+                      </ng-container>
                     </ul>
                   </div>
                 </div>
-                
               </div>
             </td>
           </tr>

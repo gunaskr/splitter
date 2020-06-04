@@ -12,7 +12,7 @@
     </div>
 </ng-template>
 <div class="container">
-    <h2>Add New Transaction</h2>
+    <h2><span *ngIf="! eventId">Add New</span><span *ngIf="eventId">Edit</span> Transaction</h2>
     <div *ngIf="eventForm" class="transaction__form" [formGroup]="eventForm">
         <div class="form-group row">
             <label for="expenseCategory" class="col-sm-2 col-form-label">Expense Category</label>

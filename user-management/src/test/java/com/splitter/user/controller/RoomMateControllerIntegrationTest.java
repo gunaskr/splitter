@@ -1,6 +1,7 @@
 package com.splitter.user.controller;
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +25,12 @@ import com.splitter.user.dto.RoomMateDTO;
 import com.splitter.user.dto.UserDTO;
 import com.splitter.user.model.Gender;
 import com.splitter.user.model.User;
+import com.splitter.user.repository.UserRepository;
 
 public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	public void testCreateRoomMates() throws URISyntaxException {
@@ -52,50 +58,53 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 	@Test
 	public void testGetRoomMates() throws URISyntaxException {
 		/* sign up user */
-		UserDTO userDTO = new UserDTO();
-		userDTO.setUsername("user");
-		userDTO.setGender(Gender.FEMALE);
-		userDTO.setAddedBy("2");
-		userDTO.setMobileNo("2");
-		userDTO.setPassword("test");
+		User user2 = new User();
+		user2.setUsername("user");
+		user2.setGender(Gender.FEMALE);
+		user2.setAddedBy("2");
+		user2.setMobileNo("2");
+		user2.setPassword("test1");
 		
-		final RequestEntity<UserDTO> signUpRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/signup"))
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(userDTO);
-		final ResponseEntity<User> signUpResponse = this.restTemplate.exchange(getBaseUrl() + "/api/signup",
-				HttpMethod.POST, signUpRequest, User.class);
+		User savedUser2 = userRepository.save(user2);
 		
-		assertTrue("signup failed", signUpResponse.getStatusCode().equals(HttpStatus.OK));
+		User user2_1 = new User();
+		user2_1.setMobileNo("1");
+		user2_1.setAddedBy("2");
+		user2_1.setGender(Gender.FEMALE);
+		user2_1.setUsername("test2_1");
 		
-		/* add users */
+		User savedUser2_1 = userRepository.save(user2_1);
+		
+		User user3_2 = new User();
+		user3_2.setMobileNo("2");
+		user3_2.setAddedBy("3");
+		user3_2.setGender(Gender.FEMALE);
+		user3_2.setUsername("test3_2");
+		
+		User savedUser3_2 = userRepository.save(user3_2);
+		
+		User user3 = new User();
+		user3.setMobileNo("3");
+		user3.setAddedBy("3");
+		user3.setGender(Gender.FEMALE);
+		user3.setUsername("test3");
+		
+		User savedUser3 = userRepository.save(user3);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken());
-		List<RoomMateDTO> users = new ArrayList<>();
-		RoomMateDTO user = new RoomMateDTO();
-		user.setMobileNo("1");
-		user.setAddedBy("2");
-		user.setGender(Gender.FEMALE);
-		user.setUsername("test");
-		users.add(user);
-		
-		final RequestEntity<List<RoomMateDTO>> addRoomMatesRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("x-auth-token", getToken())
-				.body(users);
-		final ResponseEntity<List<User>> addRoomMatesResponse = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
-				HttpMethod.POST, addRoomMatesRequest, new ParameterizedTypeReference<List<User>>() {
-				});
-		assertTrue("adding users failed", addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK));
-		
 		HttpEntity getRoomMateEntity = new HttpEntity(headers);
 		final ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<User>>() {
 				},
-				"2");
+				user2.getMobileNo());
 		assertTrue(responseGet.getStatusCode().equals(HttpStatus.OK));
-		assertTrue(responseGet.getBody().size() == 1);
+		assertEquals("room mates returned is not of correct size", 2, responseGet.getBody().size());
+		List<User> body = responseGet.getBody();
+		assertTrue("should contain the name of the user who added the current user",
+				body.stream().anyMatch(user -> {
+					return user.getUsername().equalsIgnoreCase(savedUser3.getUsername());
+				}));
 	}
 	
 	@Test

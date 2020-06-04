@@ -29,10 +29,21 @@
     margin-bottom: 10px;
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
+    &__subscript{
+      height: 15px;
+      small{
+        position: absolute;
+        bottom:0;
+      }
+    }
+    &-item{
+      padding: 1px;
+    }
+    i{
+      top: 10px;
+    }
 }
 
 .home__container{
-  border: 1px solid rgba(133, 212, 226, 0.877);
-    box-shadow: 4px 4px 4px #ccc;
     padding: 5px;
 }

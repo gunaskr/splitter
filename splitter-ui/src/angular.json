@@ -75,7 +75,8 @@
           "options": {
             "browserTarget": "splitter-ui:build",
             "hmr": true,
-            "hmrWarning": false
+            "hmrWarning": false,
+            "port": 4220
           },
           "configurations": {
             "production": {

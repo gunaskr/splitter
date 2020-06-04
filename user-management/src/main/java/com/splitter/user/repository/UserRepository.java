@@ -17,5 +17,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     List<User> findByAddedByAndMobileNoNot(final String addedBy, final String mobileNo);
     
+    List<User> findByMobileNoAndAddedByNot(final String mobileNo, final String addedBy);
+    
     void deleteByMobileNoAndAddedBy(final String mobileNo, final String addedBy);
 }

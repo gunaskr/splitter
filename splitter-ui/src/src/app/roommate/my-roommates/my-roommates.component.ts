@@ -34,7 +34,8 @@ export class MyRoommatesComponent implements OnInit {
     return this.formBuilder.group({
       name: user ? new FormControl({value: user.username, disabled: true}) : '',
       gender: user ? new FormControl({value: user.gender, disabled: true}) : '',
-      mobileNo: user ? new FormControl({value: user.mobileNo, disabled: true}) : ''
+      mobileNo: user ? new FormControl({value: user.mobileNo, disabled: true}) : '',
+      id: user ? user.id : ''
     });
   }
 
@@ -75,12 +76,18 @@ export class MyRoommatesComponent implements OnInit {
     this.isLoading = true;
     const users = this.usersForm.get('users') as FormArray;
     const mobileNo = users.at(index).value.mobileNo;
-    this.roomMateController.deleteRoomMateUsingDELETE(this.credentialService.credentials.username,
-      mobileNo)
-      .subscribe(response => {
-        users.removeAt(index);
-        this.isLoading = false;
-      });
+    const id = users.at(index).value.id;
+    if(mobileNo && id){
+      this.roomMateController.deleteRoomMateUsingDELETE(this.credentialService.credentials.username,
+        mobileNo)
+        .subscribe(response => {
+          users.removeAt(index);
+          this.isLoading = false;
+        });
+    } else {
+      users.removeAt(index);
+      this.isLoading = false;
+    }
   }
 
 }

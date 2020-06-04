@@ -13,7 +13,7 @@ export const environment = {
   production: false,
   hmr: true,
   version: '',
-  serverUrl: 'http://localhost:8080/',
+  serverUrl: 'http://localhost:8090/',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US'],
 };

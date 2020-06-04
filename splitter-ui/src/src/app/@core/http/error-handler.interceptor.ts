@@ -27,7 +27,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   private errorHandler(response: HttpEvent<any>): Observable<HttpEvent<any>> {
     if (!environment.production) {
       // Do something with the error
-      if((response as any).status === 401){
+      if((response as any).status === 401 || (response as any).status === 403){
         this.router.navigate(['/login'], { replaceUrl: true });
       }
       log.error('Request error', response);

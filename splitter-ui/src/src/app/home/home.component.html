@@ -8,7 +8,7 @@
     <button class="btn btn-success col-sm-1">GO</button>
   </div>
   <br>
-  <div class="home__container">
+  <div class="splitter__container home__container">
     <div class="row">
       <div class="col-sm-6">
         <div class="home__owe col-sm-4 offset-sm-4">
@@ -23,11 +23,14 @@
             <h5 class="panel-title">Roommates YOU OWE</h5>
           </div>
           <ul class="list-group">
-            <li class="list-group-item"
-              *ngFor="let transaction of debitTransactions">
+            <li class="list-group-item" *ngFor="let transaction of debitTransactions">
               <div class="row">
                 <div class="col-sm-6">
-                  {{transaction.toUserId}}
+                  <div class="col">
+                    <i class="fas" [ngClass]="getGenderIcon(transaction.toUserId)"></i>
+                    <span> {{ getUserName(transaction.toUserId)}}</span>
+                    <p class="list-group__subscript"><small class="text-muted">(({{transaction.toUserId | slice:0:3}}) {{transaction.toUserId | slice:3:6}}-{{transaction.toUserId | slice:6:9}})</small></p>
+                  </div>
                 </div>
                 <div class="col-sm-4">
                   {{transaction.amount | currency }}
@@ -54,11 +57,14 @@
             <h5 class="panel-title">Roommates OWE YOU</h5>
           </div>
           <ul class="list-group">
-            <li class="list-group-item"
-              *ngFor="let transaction of creditTransactions">
+            <li class="list-group-item" *ngFor="let transaction of creditTransactions">
               <div class="row">
                 <div class="col-sm-6">
-                  {{transaction.fromUserId}}
+                  <div class="col">
+                    <i class="fas" [ngClass]="getGenderIcon(transaction.fromUserId)"></i>
+                    <span> {{ getUserName(transaction.fromUserId)}}</span>
+                    <p class="list-group__subscript"><small class="text-muted">(({{transaction.fromUserId | slice:0:3}}) {{transaction.fromUserId | slice:3:6}}-{{transaction.fromUserId | slice:6:9}})</small></p>
+                  </div>
                 </div>
                 <div class="col-sm-4">
                   {{transaction.amount | currency }}

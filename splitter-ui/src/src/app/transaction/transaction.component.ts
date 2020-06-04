@@ -15,6 +15,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 export class TransactionComponent implements OnInit {
   eventForm: FormGroup;
   users: User[];
+  eventId: string;
   @ViewChild('content', { static: false }) private modalContent: any;
 
   constructor(private credentialService: CredentialsService,
@@ -26,13 +27,13 @@ export class TransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const eventId = this.route.snapshot.params.eventId;
+    this.eventId = this.route.snapshot.params.eventId;
     this.roomMateController.getRoomMatesUsingGET(this.credentialService.credentials.username)
       .subscribe(users => {
         this.users = users;
-        this.users.unshift({username:'@Me', mobileNo: this.credentialService.credentials.username})
-        if (eventId) {
-          this.eventControlerService.findEventByIdUsingGET(eventId)
+        this.users.unshift({username:'@Me', mobileNo: this.credentialService.credentials.username});
+        if (this.eventId) {
+          this.eventControlerService.findEventByIdUsingGET(this.eventId)
             .subscribe(event => {
               this.eventForm = this.createEventForm(event);
             })
