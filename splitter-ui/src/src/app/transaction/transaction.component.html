@@ -32,10 +32,14 @@
         <div class="form-group row">
             <label for="transactionDate" class="col-sm-2 col-form-label">Transaction Date</label>
             <div class="col-sm-6">
-                <input type="transactionDate" id="business_incorp_date" class="form-control"
-                    ngbDatepicker #transactionDatePicker="ngbDatepicker"
-                    (click)="transactionDatePicker.toggle()">
+                <div class="row" style="margin-left: unset;">
+                <input type="transactionDate" id="business_incorp_date" 
+                class="form-control col-sm-8" ngbDatepicker
+                    #transactionDatePicker="ngbDatepicker" formControlName="transactionDate" (click)="transactionDatePicker.toggle()">
+                        <ngb-timepicker class="col-sm-4" formControlName="transactionTime" ></ngb-timepicker>
+                    </div>
             </div>
+                
         </div>
         <div class="form-group row">
             <label for="amountSpent" class="col-sm-2 col-form-label">Total Amount</label>

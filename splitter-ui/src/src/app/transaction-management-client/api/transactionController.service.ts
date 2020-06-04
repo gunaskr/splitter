@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class TransactionControllerService {
 
-    protected basePath = 'https://localhost:8080/transaction-management';
+    protected basePath = 'https://localhost:56234';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -55,6 +55,52 @@ export class TransactionControllerService {
         return false;
     }
 
+
+    /**
+     * deleteTransactionById
+     * 
+     * @param transactionId transactionId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteTransactionByIdUsingDELETE(transactionId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteTransactionByIdUsingDELETE(transactionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteTransactionByIdUsingDELETE(transactionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteTransactionByIdUsingDELETE(transactionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (transactionId === null || transactionId === undefined) {
+            throw new Error('Required parameter transactionId was null or undefined when calling deleteTransactionByIdUsingDELETE.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (x-auth-token) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["x-auth-token"]) {
+            headers = headers.set('x-auth-token', this.configuration.apiKeys["x-auth-token"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/api/transaction/${encodeURIComponent(String(transactionId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * getTransactions

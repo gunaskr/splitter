@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   totalDebitAmount: number;
   totalCreditAmount: number;
   userMap: Map<string, User>;
+  isLoading = true;
 
   constructor(
     private credentialService: CredentialsService,
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
                   return transction.fromUserId !== this.credentialService.credentials.username;
                 });
                 this.totalCreditAmount = Number(this.calculateTotalAmount(this.creditTransactions).round(2));
+                this.isLoading = false;
               })
           }
         );

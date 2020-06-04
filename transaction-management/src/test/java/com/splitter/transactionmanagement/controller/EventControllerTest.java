@@ -5,12 +5,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -146,5 +149,23 @@ public class EventControllerTest extends AbstractIntegrationTest {
 				user1, user1);
 		assertTrue(responseFilter.getStatusCode().equals(HttpStatus.OK));
 		assertEquals("events size is not same", 2, responseFilter.getBody().size());
+	}
+	
+	@Test
+	public void testTimeSaving() {
+		Event event1 = new Event();
+		event1.setAmountSpent(BigDecimal.valueOf(100));
+		event1.setCategory(CategoryType.FOOD);
+		event1.setUserId("1");
+		event1.setName("event1");
+		LocalDateTime testTime = LocalDateTime.now();
+		event1.setCreatedAt(testTime);
+		
+		Event savedEntity = eventRepository.save(event1);
+		
+		Optional<Event> findById = eventRepository.findById(savedEntity.getId());
+		
+		assertTrue("item not present", findById.isPresent());
+		assertTrue("dates dont match", findById.get().getCreatedAt().isEqual(testTime));
 	}
 }

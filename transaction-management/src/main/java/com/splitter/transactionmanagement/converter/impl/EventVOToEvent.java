@@ -16,6 +16,7 @@ public class EventVOToEvent implements Converter<EventVO, Event>  {
 		target.setCategory(source.getCategory());
 		target.setUserId(source.getUserId());
 		target.setName(source.getName());
+		target.setCreatedAt(source.getCreatedAt());
 		return target;
 	}
 

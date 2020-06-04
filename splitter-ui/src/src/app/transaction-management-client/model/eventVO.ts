@@ -15,6 +15,7 @@ import { TransactionVO } from './transactionVO';
 export interface EventVO { 
     amountSpent?: number;
     category?: EventVO.CategoryEnum;
+    createdAt?: Date;
     id?: string;
     name?: string;
     transactions?: Array<TransactionVO>;

@@ -1,6 +1,7 @@
 package com.splitter.transactionmanagement.controller.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class EventVO {
 	private String name;
 	private String userId;
 	private BigDecimal amountSpent;
+	private LocalDateTime createdAt;
 	private List<TransactionVO> transactions = new ArrayList<>();
 	
 	public String getId() {
@@ -59,5 +61,13 @@ public class EventVO {
 
 	public void setTransactions(List<TransactionVO> transactions) {
 		this.transactions = transactions;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 }

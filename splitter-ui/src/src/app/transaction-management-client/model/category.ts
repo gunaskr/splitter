@@ -12,11 +12,11 @@
 
 
 export interface Category { 
-    createdAt?: string;
+    createdAt?: Date;
     icon?: string;
     id?: string;
     type?: Category.TypeEnum;
-    updatedAt?: string;
+    updatedAt?: Date;
 }
 export namespace Category {
     export type TypeEnum = 'FOOD' | 'TRAVEL';

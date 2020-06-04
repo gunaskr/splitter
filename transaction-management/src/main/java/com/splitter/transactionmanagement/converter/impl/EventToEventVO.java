@@ -17,6 +17,7 @@ public class EventToEventVO implements Converter<Event, EventVO> {
 		target.setUserId(source.getUserId());
 		target.setName(source.getName());
 		target.setId(source.getId());
+		target.setCreatedAt(source.getCreatedAt());
 		return target;
 	}
 

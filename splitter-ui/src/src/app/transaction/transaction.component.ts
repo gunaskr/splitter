@@ -5,12 +5,15 @@ import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@ang
 import { RoomMateControllerService, User } from '@app/user-management-client';
 import { ActivatedRoute } from '@angular/router';
 import Big from 'big.js';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbDateAdapter, NgbDate, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import {NgbTimepickerConfig} from '@ng-bootstrap/ng-bootstrap';
+import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.scss']
+  styleUrls: ['./transaction.component.scss'],
+  providers: [NgbTimepickerConfig]
 })
 export class TransactionComponent implements OnInit {
   eventForm: FormGroup;
@@ -23,7 +26,9 @@ export class TransactionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private roomMateController: RoomMateControllerService,
     private route: ActivatedRoute,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    config: NgbTimepickerConfig) {
+      config.spinners = false;
   }
 
   ngOnInit(): void {
@@ -103,10 +108,31 @@ export class TransactionComponent implements OnInit {
   }
 
   private saveExpense(event: EventVO){
-    this.eventControlerService.createEventUsingPOST(event)
+    const eventToSave = JSON.parse(JSON.stringify(event));
+    const ngbDate: NgbDate = (event as any).transactionDate;
+    const ngbTime: NgbTime = (event as any).transactionTime;
+    const backendDate = new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day);
+    backendDate.setHours(ngbTime.hour);
+    backendDate.setMinutes(ngbTime.minute);
+    delete (eventToSave as any).transactionDate;
+    delete (eventToSave as any).transactionTime;
+    //eventToSave['createdAt'] = backendDate.toLocaleString();
+    
+    //eventToSave['createdAt'] = backendDate;
+    debugger;
+    eventToSave['createdAt'] = new Date(this.getUTCDateString(ngbDate, ngbTime));
+    this.eventControlerService.createEventUsingPOST(eventToSave)
       .subscribe(event => {
         this.eventForm.markAsPristine();
       });
+  }
+
+  private getUTCDateString(date: NgbDateStruct, time: NgbTimeStruct){
+    // '6/29/2011 4:52:48 PM UTC'
+    const dateInUTC = date.month + '/' + date.day + '/' + date.year + ' ' 
+    + (((time.hour + 0) % 12) || 12) + ':' + time.minute + ':00 ' + ((time.hour + 0) >= 12 ? 'PM' : 'AM') + ' UTC';
+    return dateInUTC;
+    
   }
 
   private createEventForm(event?: EventVO) {
@@ -124,9 +150,21 @@ export class TransactionComponent implements OnInit {
         category: new FormControl(event ? event.category : '', Validators.required),
         name: new FormControl(event ? event.name : '', Validators.required),
         userId: this.credentialService.credentials.username,
+        transactionDate: new FormControl(event ? this.getNgbDate(event.createdAt) : '', Validators.required),
+        transactionTime: new FormControl(event ? this.getNgbTime(event.createdAt) : '', Validators.required),
         transactions: this.formBuilder.array(transactionForms, Validators.required)
       }
     );
+  }
+
+  private getNgbDate(dateInput: Date): NgbDateStruct {
+    const date = new Date(dateInput);
+    return {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+  }
+
+  private getNgbTime(dateInput: Date): NgbTimeStruct {
+    const date = new Date(dateInput);
+    return { hour: date.getHours() , minute: date.getMinutes(), second: 0};
   }
 
   private createTransactionForm(transaction?: TransactionVO) {

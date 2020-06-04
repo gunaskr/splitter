@@ -28,7 +28,6 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR5</spring-cloud.version>
 		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-		<mongobee.version>0.13</mongobee.version>
 	</properties>
 
 	<profiles>
@@ -139,12 +138,6 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${springfox-swagger2.version}</version>
 		</dependency>
-		<!-- mongo bee -->
-		<dependency>
-			<groupId>com.github.mongobee</groupId>
-			<artifactId>mongobee</artifactId>
-			<version>${mongobee.version}</version>
-		</dependency>
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -210,5 +203,4 @@
 			</testResource>
 		</testResources>
 	</build>
-
-</project>
+	</project>
