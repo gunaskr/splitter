@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class CategoryControllerService {
 
-    protected basePath = 'https://localhost:56234';
+    protected basePath = 'https://localhost:8090/transaction-management';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

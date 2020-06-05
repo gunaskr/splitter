@@ -138,6 +138,11 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${springfox-swagger2.version}</version>
 		</dependency>
+		<!-- feign -->
+		<dependency>
+	        <groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-openfeign</artifactId>
+	    </dependency>
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

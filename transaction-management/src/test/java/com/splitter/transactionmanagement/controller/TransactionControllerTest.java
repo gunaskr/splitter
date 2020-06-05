@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,7 @@ import com.splitter.transactionmanagement.model.Event;
 import com.splitter.transactionmanagement.model.Transaction;
 import com.splitter.transactionmanagement.repository.EventRepository;
 import com.splitter.transactionmanagement.repository.TransactionRepository;
+import com.splitter.transactionmanagement.repository.UserManagementClient;
 
 public class TransactionControllerTest extends AbstractIntegrationTest {
 	
@@ -29,6 +31,9 @@ public class TransactionControllerTest extends AbstractIntegrationTest {
 	
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@MockBean
+	private UserManagementClient userManagementClient;
 
 	@Test
 	public void testGetTransactions() throws Exception {

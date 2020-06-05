@@ -6,12 +6,16 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.ModCheck;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
 import org.springframework.http.HttpEntity;
@@ -21,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.splitter.transactionmanagement.AbstractIntegrationTest;
 import com.splitter.transactionmanagement.controller.dto.EventVO;
@@ -28,8 +33,10 @@ import com.splitter.transactionmanagement.controller.dto.TransactionVO;
 import com.splitter.transactionmanagement.model.CategoryType;
 import com.splitter.transactionmanagement.model.Event;
 import com.splitter.transactionmanagement.model.Transaction;
+import com.splitter.transactionmanagement.model.User;
 import com.splitter.transactionmanagement.repository.EventRepository;
 import com.splitter.transactionmanagement.repository.TransactionRepository;
+import com.splitter.transactionmanagement.repository.UserManagementClient;
 
 public class EventControllerTest extends AbstractIntegrationTest {
 	
@@ -38,6 +45,9 @@ public class EventControllerTest extends AbstractIntegrationTest {
 	
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@MockBean
+	private UserManagementClient userManagementClient;
 
 	@Test
 	public void testCreateEvent() throws Exception {
@@ -50,23 +60,31 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		EventVO eventRequest = new EventVO();
 		eventRequest.setAmountSpent(BigDecimal.valueOf(100));
 		eventRequest.setCategory(CategoryType.FOOD);
-		eventRequest.setUserId(primaryUser);
+		User primaryUserObject = new User();
+		primaryUserObject.setMobileNo(primaryUser);
+		eventRequest.setUser(primaryUserObject);
 		
 		TransactionVO r1 = new TransactionVO();
-		r1.setFromUserId(primaryUser);
-		r1.setToUserId(primaryUser);
+		r1.setFromUser(primaryUserObject);
+		r1.setToUser(primaryUserObject);
 		r1.setAmount(BigDecimal.valueOf(33.33f));
 		eventRequest.getTransactions().add(r1);
 		
+		User secondUserObject = new User();
+		secondUserObject.setMobileNo(secondUser);
+		
 		TransactionVO r2 = new TransactionVO();
-		r2.setFromUserId(secondUser);
-		r2.setToUserId(primaryUser);
+		r2.setFromUser(secondUserObject);
+		r2.setToUser(primaryUserObject);
 		r2.setAmount(BigDecimal.valueOf(33.33f));
 		eventRequest.getTransactions().add(r2);
 		
+		User thirdUserObject = new User();
+		thirdUserObject.setMobileNo(thirdUser);
+		
 		TransactionVO r3 = new TransactionVO();
-		r3.setFromUserId(thirdUser);
-		r3.setToUserId(primaryUser);
+		r3.setFromUser(thirdUserObject);
+		r3.setToUser(primaryUserObject);
 		r3.setAmount(BigDecimal.valueOf(33.33f));
 		eventRequest.getTransactions().add(r3);
 		
@@ -89,6 +107,19 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		String user1 = "1";
 		String user2 = "2";
 		String user3 = "3";
+		List<User> users = new ArrayList<>();
+		User user1Object = new User();
+		user1Object.setMobileNo(user1);
+		users.add(user1Object);
+		
+		User user2Object = new User();
+		user2Object.setMobileNo(user2);
+		users.add(user2Object);
+		
+		User user3Object = new User();
+		user3Object.setMobileNo(user3);
+		users.add(user3Object);
+		
 		Event event1 = new Event();
 		event1.setAmountSpent(BigDecimal.valueOf(100));
 		event1.setCategory(CategoryType.FOOD);
@@ -133,7 +164,9 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		transactionRepository.save(t4);
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("x-auth-token", getToken());
+		String token = getToken();
+		headers.add("x-auth-token", token);
+		Mockito.when(userManagementClient.getRoomMates("test", token)).thenReturn(users);
 		HttpEntity entityWithHeader = new HttpEntity(headers);
 		final ResponseEntity<EventVO> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/event/{eventId}",
 				HttpMethod.GET, entityWithHeader, new ParameterizedTypeReference<EventVO>() {
@@ -141,6 +174,7 @@ public class EventControllerTest extends AbstractIntegrationTest {
 				savedEvent1.getId());
 		assertTrue(responseGet.getStatusCode().equals(HttpStatus.OK));
 		assertEquals("event is not same", "event1", responseGet.getBody().getName());
+		assertEquals("mobile no is not same", "1", responseGet.getBody().getUser().getMobileNo());
 		assertEquals("transaction size is not ame", 2, responseGet.getBody().getTransactions().size());
 		
 		final ResponseEntity<List<EventVO>> responseFilter = this.restTemplate.exchange(getBaseUrl() + "/api/event?fromUserId={fromUserId}&toUserId={toUserId}",

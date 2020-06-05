@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { TransactionVO } from './transactionVO';
+import { User } from './user';
 
 
 export interface EventVO { 
@@ -19,7 +20,7 @@ export interface EventVO {
     id?: string;
     name?: string;
     transactions?: Array<TransactionVO>;
-    userId?: string;
+    user?: User;
 }
 export namespace EventVO {
     export type CategoryEnum = 'FOOD' | 'TRAVEL';

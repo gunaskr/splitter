@@ -59,7 +59,7 @@ public class BasicUserService implements UserService {
 	@Override
 	public List<User> getRoomMatesByMobileNo(String mobileNo) {
 		/* finding all the users added by current user */
-		final List<User> roomMates = repository.findByAddedByAndMobileNoNot(mobileNo, mobileNo);
+		final List<User> roomMates = repository.findByAddedBy(mobileNo);
 		/* finding all the users who added current user as room mate */
 		final List<User> roomMatesWhoAddedCurrentUserAsRommmate = repository.findByMobileNoAndAddedByNot(mobileNo, mobileNo);
 		for(final User otherUser: roomMatesWhoAddedCurrentUserAsRommmate) {

@@ -14,7 +14,7 @@ public class EventVOToEvent implements Converter<EventVO, Event>  {
 		final Event target = new Event();
 		target.setAmountSpent(source.getAmountSpent());
 		target.setCategory(source.getCategory());
-		target.setUserId(source.getUserId());
+		target.setUserId(source.getUser().getMobileNo());
 		target.setName(source.getName());
 		target.setCreatedAt(source.getCreatedAt());
 		return target;

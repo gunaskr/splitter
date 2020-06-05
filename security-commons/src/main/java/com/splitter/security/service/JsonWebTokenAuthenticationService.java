@@ -1,19 +1,19 @@
 package com.splitter.security.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.splitter.security.config.TokenHolder;
 import com.splitter.security.constants.SecurityConstants;
 import com.splitter.security.exception.model.UserNotFoundException;
 import com.splitter.security.model.Authority;
@@ -33,9 +33,13 @@ public class JsonWebTokenAuthenticationService implements TokenAuthenticationSer
 
     @Value("${security.token.secret.key}")
     private String secretKey;
+    
+    @Autowired
+    private TokenHolder tokenHolder;
 
     public Authentication authenticate(final HttpServletRequest request) {
         final String token = request.getHeader(SecurityConstants.AUTH_HEADER_NAME);
+        tokenHolder.setToken(token);
         final Jws<Claims> tokenData = parseToken(token);
         if (tokenData != null) {
         	final Date expiryDate = new Date((long) tokenData.getBody().get("token_expiration_date"));

@@ -3,7 +3,12 @@ package com.splitter.security.config;
 import com.splitter.security.filter.AuthenticationTokenFilter;
 import com.splitter.security.service.TokenAuthenticationService;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.SimpleThreadScope;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -36,4 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
     }
+    
+    @Bean
+	public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
+	    return new BeanFactoryPostProcessor() {
+	        @Override
+	        public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+	            beanFactory.registerScope("thread", new SimpleThreadScope());
+	        }
+	    };
+	}
 }

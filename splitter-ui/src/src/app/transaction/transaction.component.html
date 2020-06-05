@@ -1,3 +1,4 @@
+<app-loader [isLoading]="isLoading"></app-loader>
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title">Amount Mismatch</h4>
@@ -76,8 +77,8 @@
                     <tbody>
                         <tr *ngFor="let user of eventForm?.controls?.transactions?.controls; index as i"
                             [formGroupName]="i">
-                            <td>
-                                <select class="form-control" id="expenseCategory" formControlName="fromUserId">
+                            <td formGroupName="fromUser">
+                                <select class="form-control" id="expenseCategory" formControlName="mobileNo">
                                     <option *ngFor="let user of users" [value]="user.mobileNo">{{user.username}}</option>
                                 </select>
                             </td>

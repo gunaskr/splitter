@@ -28,9 +28,9 @@ storage:
 server:
   port: 0
 eureka:
-  client:
-   enabled: false
-   fetchRegistry: false
-   serviceUrl:
-    shouldFetchRegistry: false
-   registerWithEureka: false
+ client:
+  enabled: false
+  fetchRegistry: false
+  serviceUrl:
+   shouldFetchRegistry: false
+  registerWithEureka: false

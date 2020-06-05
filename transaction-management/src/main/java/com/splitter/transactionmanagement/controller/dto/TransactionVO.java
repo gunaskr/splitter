@@ -2,10 +2,12 @@ package com.splitter.transactionmanagement.controller.dto;
 
 import java.math.BigDecimal;
 
+import com.splitter.transactionmanagement.model.User;
+
 public class TransactionVO {
 	private String id;
-	private String fromUserId;
-	private String toUserId;
+	private User fromUser;
+	private User toUser;
 	private BigDecimal amount;
 	public BigDecimal getAmount() {
 		return amount;
@@ -19,17 +21,17 @@ public class TransactionVO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getFromUserId() {
-		return fromUserId;
+	public User getFromUser() {
+		return fromUser;
 	}
-	public void setFromUserId(String fromUserId) {
-		this.fromUserId = fromUserId;
+	public void setFromUser(User fromUser) {
+		this.fromUser = fromUser;
 	}
-	public String getToUserId() {
-		return toUserId;
+	public User getToUser() {
+		return toUser;
 	}
-	public void setToUserId(String toUserId) {
-		this.toUserId = toUserId;
+	public void setToUser(User toUser) {
+		this.toUser = toUser;
 	}
 	
 }

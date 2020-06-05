@@ -19,6 +19,7 @@ export class TransactionComponent implements OnInit {
   eventForm: FormGroup;
   users: User[];
   eventId: string;
+  isLoading = true;
   @ViewChild('content', { static: false }) private modalContent: any;
 
   constructor(private credentialService: CredentialsService,
@@ -36,14 +37,15 @@ export class TransactionComponent implements OnInit {
     this.roomMateController.getRoomMatesUsingGET(this.credentialService.credentials.username)
       .subscribe(users => {
         this.users = users;
-        this.users.unshift({username:'@Me', mobileNo: this.credentialService.credentials.username});
         if (this.eventId) {
           this.eventControlerService.findEventByIdUsingGET(this.eventId)
             .subscribe(event => {
               this.eventForm = this.createEventForm(event);
+              this.isLoading = false;
             })
         } else {
           this.eventForm = this.createEventForm();
+          this.isLoading = false;
         }
       })
   }
@@ -80,8 +82,12 @@ export class TransactionComponent implements OnInit {
       const transactions: TransactionVO[] = this.users.map(user => {
         return {
           amount: amountPerUser.round(2) as any,
-          fromUserId: user.mobileNo,
-          toUserId: this.credentialService.credentials.username
+          fromUser: {
+            mobileNo:user.mobileNo
+          },
+          toUser: {
+            mobileNo:this.credentialService.credentials.username
+          }
         }
       });
       transactions.forEach(transaction => {
@@ -116,14 +122,12 @@ export class TransactionComponent implements OnInit {
     backendDate.setMinutes(ngbTime.minute);
     delete (eventToSave as any).transactionDate;
     delete (eventToSave as any).transactionTime;
-    //eventToSave['createdAt'] = backendDate.toLocaleString();
-    
-    //eventToSave['createdAt'] = backendDate;
-    debugger;
+    this.isLoading = true;
     eventToSave['createdAt'] = new Date(this.getUTCDateString(ngbDate, ngbTime));
     this.eventControlerService.createEventUsingPOST(eventToSave)
       .subscribe(event => {
         this.eventForm.markAsPristine();
+        this.isLoading = false;
       });
   }
 
@@ -149,7 +153,11 @@ export class TransactionComponent implements OnInit {
         amountSpent: new FormControl(event ? event.amountSpent : null , [Validators.required, Validators.pattern(/^\d{1,10}(\.\d{1,4})?$/)]),
         category: new FormControl(event ? event.category : '', Validators.required),
         name: new FormControl(event ? event.name : '', Validators.required),
-        userId: this.credentialService.credentials.username,
+        user: this.formBuilder.group(
+          {
+            mobileNo: this.credentialService.credentials.username
+          }
+        ),
         transactionDate: new FormControl(event ? this.getNgbDate(event.createdAt) : '', Validators.required),
         transactionTime: new FormControl(event ? this.getNgbTime(event.createdAt) : '', Validators.required),
         transactions: this.formBuilder.array(transactionForms, Validators.required)
@@ -158,20 +166,28 @@ export class TransactionComponent implements OnInit {
   }
 
   private getNgbDate(dateInput: Date): NgbDateStruct {
-    const date = new Date(dateInput);
+    const date = new Date(new Date(dateInput).toLocaleString());
     return {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
   }
 
   private getNgbTime(dateInput: Date): NgbTimeStruct {
-    const date = new Date(dateInput);
+    const date = new Date(new Date(dateInput).toLocaleString());
     return { hour: date.getHours() , minute: date.getMinutes(), second: 0};
   }
 
   private createTransactionForm(transaction?: TransactionVO) {
     const formGroup = this.formBuilder.group({
       id: transaction ? transaction.id : '',
-      fromUserId: new FormControl(transaction ? transaction.fromUserId : '', Validators.required),
-      toUserId: transaction ? transaction.toUserId : this.credentialService.credentials.username,
+      fromUser: this.formBuilder.group(
+        {
+          mobileNo: new FormControl(transaction ? transaction.fromUser.mobileNo : '', Validators.required)
+        }
+      ),
+      toUser: this.formBuilder.group(
+        {
+          mobileNo: transaction ? transaction.toUser.mobileNo : this.credentialService.credentials.username
+        }
+      ),
       amount: new FormControl( transaction ? transaction.amount : null , [Validators.required, Validators.pattern(/^\d{1,10}(\.\d{1,4})?$/)])
     });
     return formGroup;

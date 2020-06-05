@@ -38,13 +38,13 @@ export class HomeComponent implements OnInit {
         ).subscribe(
           debitTransactions => {
             this.debitTransactions = debitTransactions.filter(transction => {
-              return transction.toUserId !== this.credentialService.credentials.username;
+              return transction.toUser.mobileNo !== this.credentialService.credentials.username;
             });
             this.totalDebitAmount = Number(this.calculateTotalAmount(this.debitTransactions).round(2));
             this.transactionControllerService.getTransactionsUsingGET(null, this.credentialService.credentials.username)
               .subscribe(creditTransactions => {
                 this.creditTransactions = creditTransactions.filter(transction => {
-                  return transction.fromUserId !== this.credentialService.credentials.username;
+                  return transction.fromUser.mobileNo !== this.credentialService.credentials.username;
                 });
                 this.totalCreditAmount = Number(this.calculateTotalAmount(this.creditTransactions).round(2));
                 this.isLoading = false;

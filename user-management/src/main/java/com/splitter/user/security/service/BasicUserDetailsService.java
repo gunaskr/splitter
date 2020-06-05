@@ -23,6 +23,8 @@ public class BasicUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String mobileNo) throws UsernameNotFoundException {
         final User user = userService.findUserByMobileNoAndAddedBy(mobileNo, mobileNo);
+        /* we want to capture mobileNo as user name */
+        user.setUsername(user.getMobileNo());
         if (user != null) {
             return user;
         } else {

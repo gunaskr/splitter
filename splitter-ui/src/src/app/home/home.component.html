@@ -28,8 +28,8 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="col">
-                    <i class="fas" [ngClass]="getGenderIcon(transaction.toUserId)"></i>
-                    <span> {{ getUserName(transaction.toUserId)}}</span>
+                    <i class="fas" [ngClass]="getGenderIcon(transaction.toUser.mobileNo)"></i>
+                    <span> {{ transaction.toUser.username }}</span>
                     <p class="list-group__subscript"><small class="text-muted">(({{transaction.toUserId | slice:0:3}}) {{transaction.toUserId | slice:3:6}}-{{transaction.toUserId | slice:6:9}})</small></p>
                   </div>
                 </div>

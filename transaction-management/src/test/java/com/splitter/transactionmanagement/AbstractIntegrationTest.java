@@ -20,7 +20,7 @@ import com.splitter.security.model.Authority;
 import com.splitter.security.service.JWTUserDetails;
 import com.splitter.security.service.TokenService;
 
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {TransactionManagementApplication.class}, 
 webEnvironment = WebEnvironment.RANDOM_PORT)

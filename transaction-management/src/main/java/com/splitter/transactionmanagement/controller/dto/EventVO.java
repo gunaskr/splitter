@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.splitter.transactionmanagement.model.CategoryType;
+import com.splitter.transactionmanagement.model.User;
 
 public class EventVO {
 	private String id;
 	private CategoryType category;
 	private String name;
-	private String userId;
+	private User user;
 	private BigDecimal amountSpent;
 	private LocalDateTime createdAt;
 	private List<TransactionVO> transactions = new ArrayList<>();
@@ -39,12 +40,12 @@ public class EventVO {
 		this.name = name;
 	}
 
-	public String getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public BigDecimal getAmountSpent() {
