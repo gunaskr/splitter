@@ -23,8 +23,7 @@
                 aria-hidden="true"></i>
               <i *ngIf="showRow(i)" class="fas fa-minus-circle transactions__icon" (click)="expandRow(i)"></i>
             </td>
-            <td><span>{{getUserName(event.userId)}}</span><span>(({{event.userId | slice:0:3}})
-                {{event.userId | slice:3:6}}-{{event.userId | slice:6:9}})</span></td>
+            <td><span>{{event.user.username}}</span><span>{{ event.user.mobileNo | phoneNumber }}</span></td>
             <td>{{ event.category }}</td>
             <td>{{ event.createdAt | date }}</td>
             <td>{{ event.amountSpent | currency }}</td>
@@ -39,11 +38,11 @@
                     <h6 class="card-subtitle mb-2 text-muted">Participants</h6>
                     <ul class="list-group list-group-flush">
                       <ng-container *ngFor="let transaction of event.transactions">
-                        <li class="list-group-item" [ngClass]="{'active' : isCurrentUser(transaction.fromUserId)}"
-                          *ngIf="!(transaction.fromUserId === event.userId)">
+                        <li class="list-group-item" [ngClass]="{'active' : isCurrentUser(transaction.fromUser.mobileNo)}"
+                          *ngIf="!(transaction.fromUser.mobileNo === event.user.mobileNo)">
                           <div class="row">
                             <div class="col-sm-6">
-                              {{getUserName(transaction.fromUserId)}}
+                              {{transaction.fromUser.username}}
                             </div>
                             <div class="col-sm-4">
                               {{transaction.amount | currency }}

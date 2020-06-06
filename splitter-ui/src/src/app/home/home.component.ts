@@ -14,9 +14,8 @@ export class HomeComponent implements OnInit {
   users: User[];
   debitTransactions: TransactionVO[];
   creditTransactions: TransactionVO[];
-  totalDebitAmount: number;
+  
   totalCreditAmount: number;
-  userMap: Map<string, User>;
   isLoading = true;
 
   constructor(
@@ -25,34 +24,24 @@ export class HomeComponent implements OnInit {
     private roomMateControllerService: RoomMateControllerService) { }
 
   ngOnInit() {
-    this.roomMateControllerService.getRoomMatesUsingGET(this.credentialService.credentials.username)
-      .subscribe(users => {
-        users.unshift({ username: '@Me', mobileNo: this.credentialService.credentials.username });
-        this.userMap = new Map();
-        users.forEach(user => {
-          this.userMap.set(user.mobileNo, user);
+    this.transactionControllerService.getTransactionsUsingGET(
+      this.credentialService.credentials.username,
+      null
+    ).subscribe(
+      debitTransactions => {
+        this.debitTransactions = debitTransactions.filter(transction => {
+          return transction.toUser.mobileNo !== this.credentialService.credentials.username;
         });
-        this.transactionControllerService.getTransactionsUsingGET(
-          this.credentialService.credentials.username,
-          null
-        ).subscribe(
-          debitTransactions => {
-            this.debitTransactions = debitTransactions.filter(transction => {
-              return transction.toUser.mobileNo !== this.credentialService.credentials.username;
+        this.transactionControllerService.getTransactionsUsingGET(null, this.credentialService.credentials.username)
+          .subscribe(creditTransactions => {
+            this.creditTransactions = creditTransactions.filter(transction => {
+              return transction.fromUser.mobileNo !== this.credentialService.credentials.username;
             });
-            this.totalDebitAmount = Number(this.calculateTotalAmount(this.debitTransactions).round(2));
-            this.transactionControllerService.getTransactionsUsingGET(null, this.credentialService.credentials.username)
-              .subscribe(creditTransactions => {
-                this.creditTransactions = creditTransactions.filter(transction => {
-                  return transction.fromUser.mobileNo !== this.credentialService.credentials.username;
-                });
-                this.totalCreditAmount = Number(this.calculateTotalAmount(this.creditTransactions).round(2));
-                this.isLoading = false;
-              })
-          }
-        );
+            this.totalCreditAmount = Number(this.calculateTotalAmount(this.creditTransactions).round(2));
+            this.isLoading = false;
+          })
       }
-      );
+    );
   }
 
   calculateTotalAmount(transactions: TransactionVO[]): Big {
@@ -60,13 +49,9 @@ export class HomeComponent implements OnInit {
       return p.add(new Big(c.amount));
     }, new Big(0));
   }
-  
-  getUserName(userId:string): string {
-    return this.userMap.get(userId) ? this.userMap.get(userId).username: 'Unknown';
-  }
 
-  getGenderIcon(userId: string): string {
-    return this.userMap.get(userId) ? 
-    (this.userMap.get(userId).gender === User.GenderEnum.FEMALE.toString() ? 'fa-female' : 'fa-male'): 'Unknown';
+  getGenderIcon(user: User): string {
+    return user ? 
+    (user.gender === User.GenderEnum.FEMALE.toString() ? 'fa-female' : 'fa-male'): 'Unknown';
   }
 }

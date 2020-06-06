@@ -36,14 +36,14 @@
             <input type="text" class="form-control" formControlName="mobileNo">
           </td>
           <td>
-            <i *ngIf="user.value.id"class="fas fa-edit"></i>
+            <i *ngIf="user.value.id" class="fas fa-edit btn disabled"></i>
             &nbsp;
-            <i class="fas fa-times-circle" (click)="deleteUser(i)"></i>
+            <i  class="fas fa-times-circle" [ngClass]="{'btn disabled': user.value.id }" (click)="(! user.value.id) && deleteUser(i)"></i>
           </td>
         </tr>
       </tbody>
     </table>
     <br>
-    <button type="button" class="btn btn-success" (click)="saveDetails()">Save Details</button>
+    <button type="button" class="btn btn-success" [disabled]="usersForm.pristine || usersForm.invalid" (click)="saveDetails()">Save Details</button>
   </div>
 </div>

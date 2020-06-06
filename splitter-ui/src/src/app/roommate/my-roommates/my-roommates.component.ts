@@ -45,31 +45,33 @@ export class MyRoommatesComponent implements OnInit {
   }
 
   saveDetails() {
-    this.isLoading = true;
     const users = this.usersForm.get('users') as FormArray;
     const formGroupsToSave: FormGroup[] = []
     users.controls.forEach(control => {
-      if((control as FormGroup).dirty){
+      if ((control as FormGroup).dirty) {
         formGroupsToSave.push((control as FormGroup));
       }
     });
-    const roomMates: RoomMateDTO[] = [];
-    formGroupsToSave.forEach(formGroup => {
-      roomMates.push({
-        username: formGroup.value.name,
-        gender: formGroup.value.gender as RoomMateDTO.GenderEnum,
-        mobileNo: formGroup.value.mobileNo,
-        addedBy: this.credentialService.credentials.username
-      })
-    })
-    this.roomMateController.createRoomMatesUsingPOST(roomMates)
-    .subscribe(response => {
-      users.markAsPristine();
+    if (formGroupsToSave.length) {
+      this.isLoading = true;
+      const roomMates: RoomMateDTO[] = [];
       formGroupsToSave.forEach(formGroup => {
-        formGroup.disable();
-      });
-      this.isLoading = false;
-    })
+        roomMates.push({
+          username: formGroup.value.name,
+          gender: formGroup.value.gender as RoomMateDTO.GenderEnum,
+          mobileNo: formGroup.value.mobileNo,
+          addedBy: this.credentialService.credentials.username
+        })
+      })
+      this.roomMateController.createRoomMatesUsingPOST(roomMates)
+        .subscribe(response => {
+          users.markAsPristine();
+          formGroupsToSave.forEach(formGroup => {
+            formGroup.disable();
+          });
+          this.isLoading = false;
+        })
+    }
   }
 
   deleteUser(index: number){

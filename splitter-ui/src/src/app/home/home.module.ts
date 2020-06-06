@@ -6,9 +6,10 @@ import { CoreModule } from '@core';
 import { SharedModule } from '@shared';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
+import { TransactionSnapshotComponent } from './transaction-snapshot/transaction-snapshot.component';
 
 @NgModule({
   imports: [CommonModule, TranslateModule, CoreModule, SharedModule, HomeRoutingModule],
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, TransactionSnapshotComponent],
 })
 export class HomeModule {}
