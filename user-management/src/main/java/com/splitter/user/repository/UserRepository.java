@@ -13,11 +13,13 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     User findByUsername(final String userName);
     
-    User findByMobileNoAndAddedBy(final String mobileNo, final String addedBy);
+    User findByCompositeKeyMobileNoAndCompositeKeyAddedBy(final String mobileNo, final String addedBy);
     
-    List<User> findByAddedBy(final String addedBy);
+    List<User> findByCompositeKeyAddedBy(final String addedBy);
     
-    List<User> findByMobileNoAndAddedByNot(final String mobileNo, final String addedBy);
+    List<User> findByCompositeKeyMobileNoAndCompositeKeyAddedByNot(final String mobileNo, final String addedBy);
     
-    void deleteByMobileNoAndAddedBy(final String mobileNo, final String addedBy);
+    void deleteByCompositeKeyMobileNoAndCompositeKeyAddedBy(final String mobileNo, final String addedBy);
+
+	List<User> findByCompositeKeyAddedByAndCompositeKeyMobileNoNot(String addedBy, String mobileNo);
 }

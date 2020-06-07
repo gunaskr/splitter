@@ -42,11 +42,12 @@ public abstract class AbstractIntegrationTest {
     }
     
     
-    protected String getToken() {
+    protected String getToken(String userName) {
+    	userName = userName == null ? "test": userName;
     	List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
     	authorities.add(Authority.ROLE_USER);
     	JWTUserDetails userDetails = new JWTUserDetails(authorities, 
-    			"test", false, false, false, true);
+    			userName, false, false, false, true);
     	return tokenService.getToken(userDetails);
     }
     

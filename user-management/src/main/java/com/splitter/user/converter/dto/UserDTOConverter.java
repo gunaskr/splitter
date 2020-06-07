@@ -3,6 +3,7 @@ package com.splitter.user.converter.dto;
 import com.splitter.security.model.Authority;
 import com.splitter.user.dto.UserDTO;
 import com.splitter.user.model.User;
+import com.splitter.user.model.User.CompositeKey;
 
 import org.springframework.core.convert.converter.Converter;
 
@@ -25,8 +26,11 @@ public class UserDTOConverter implements Converter<UserDTO, User> {
         List<Authority> authorities = new ArrayList<>();
         authorities.add(Authority.ROLE_USER);
         user.setAuthorities(authorities);
-        user.setMobileNo(dto.getMobileNo());
-        user.setAddedBy(dto.getAddedBy());
+        
+        CompositeKey key = new CompositeKey();
+		key.setMobileNo(dto.getMobileNo());
+		key.setAddedBy(dto.getAddedBy());
+		user.setCompositeKey(key);
         user.setGender(dto.getGender());
         return user;
     }

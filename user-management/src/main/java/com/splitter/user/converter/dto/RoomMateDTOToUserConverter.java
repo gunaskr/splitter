@@ -6,14 +6,17 @@ import org.springframework.core.convert.converter.Converter;
 
 import com.splitter.user.dto.RoomMateDTO;
 import com.splitter.user.model.User;
+import com.splitter.user.model.User.CompositeKey;
 
 public class RoomMateDTOToUserConverter implements Converter<RoomMateDTO, User> {
 
 	@Override
 	public User convert(RoomMateDTO source) {
 		final User user = new User();
-		user.setMobileNo(source.getMobileNo());
-		user.setAddedBy(source.getAddedBy());
+		CompositeKey key = new CompositeKey();
+		key.setMobileNo(source.getMobileNo());
+		key.setAddedBy(source.getAddedBy());
+		user.setCompositeKey(key);
 		user.setGender(source.getGender());
 		user.setUsername(source.getUsername());
 		user.setAccountNonExpired(false);

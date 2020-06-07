@@ -37,4 +37,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
+    
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity handleAbstractException(final RuntimeException exception) {
+        log.warn("Processing abstract exception: {}", exception.getMessage());
+
+        return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
