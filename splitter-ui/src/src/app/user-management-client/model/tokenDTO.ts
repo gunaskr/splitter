@@ -11,16 +11,6 @@
  */
 
 
-export interface RoomMateDTO { 
-    addedBy?: string;
-    gender?: RoomMateDTO.GenderEnum;
-    mobileNo?: string;
-    username?: string;
-}
-export namespace RoomMateDTO {
-    export type GenderEnum = 'MALE' | 'FEMALE';
-    export const GenderEnum = {
-        MALE: 'MALE' as GenderEnum,
-        FEMALE: 'FEMALE' as GenderEnum
-    };
+export interface TokenDTO { 
+    token?: string;
 }

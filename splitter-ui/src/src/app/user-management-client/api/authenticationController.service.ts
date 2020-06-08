@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { LoginDTO } from '../model/loginDTO';
+import { TokenDTO } from '../model/tokenDTO';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -27,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class AuthenticationControllerService {
 
-    protected basePath = 'https://localhost:57057';
+    protected basePath = 'https://localhost:8090/user-management';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -63,9 +64,9 @@ export class AuthenticationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authenticateUsingPOST(dto: LoginDTO, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public authenticateUsingPOST(dto: LoginDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public authenticateUsingPOST(dto: LoginDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public authenticateUsingPOST(dto: LoginDTO, observe?: 'body', reportProgress?: boolean): Observable<TokenDTO>;
+    public authenticateUsingPOST(dto: LoginDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TokenDTO>>;
+    public authenticateUsingPOST(dto: LoginDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TokenDTO>>;
     public authenticateUsingPOST(dto: LoginDTO, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (dto === null || dto === undefined) {
@@ -97,7 +98,7 @@ export class AuthenticationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<any>(`${this.basePath}/api/auth`,
+        return this.httpClient.post<TokenDTO>(`${this.basePath}/api/v1/auth`,
             dto,
             {
                 withCredentials: this.configuration.withCredentials,

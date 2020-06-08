@@ -14,9 +14,6 @@ public class UserDTO implements Serializable {
     private String mobileNo;
     private String addedBy;
     private Gender gender;
-    
-    public UserDTO() {
-    }
 
     public String getMobileNo() {
 		return mobileNo;

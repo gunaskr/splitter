@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.splitter.user.model.User;
+import com.splitter.user.model.User.CompositeKey;
 import com.splitter.user.repository.UserRepository;
 
 
@@ -29,15 +30,6 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public User find(final String id) {
-    	Optional<User> findById = repository.findById(id);
-    	if(findById.isPresent()){
-    		return findById.get();
-    	}
-        return null;
-    }
-
-    @Override
     public User findByUsername(final String userName) {
         return repository.findByUsername(userName);
     }
@@ -49,7 +41,14 @@ public class BasicUserService implements UserService {
     
     @Override
     public User findUserByMobileNoAndAddedBy(final String mobileNo, final String addedBy) {
-    	return repository.findByCompositeKeyMobileNoAndCompositeKeyAddedBy(mobileNo, addedBy);
+    	final CompositeKey key = new CompositeKey();
+        key.setMobileNo(mobileNo);
+        key.setAddedBy(addedBy);
+    	Optional<User> findById = repository.findById(key);
+    	if(findById.isPresent()) {
+    		return findById.get();
+    	}
+		return null;
     }
 
 	@Override
@@ -58,11 +57,11 @@ public class BasicUserService implements UserService {
 		final List<User> roomMatesBySelf = repository.findByCompositeKeyAddedByAndCompositeKeyMobileNoNot(mobileNo, mobileNo);
 		final List<User> roomMatesAddedByOthers = repository.findByCompositeKeyMobileNoAndCompositeKeyAddedByNot(mobileNo, mobileNo);
 		if((roomMatesBySelf.size() + roomMatesAddedByOthers.size() + users.size()) > 6) {
-			throw new RuntimeException("cannot add more than 6 room mates for one user" + mobileNo);
+			throw new IllegalArgumentException("cannot add more than 6 room mates for one user" + mobileNo);
 		}
 		for(final User newUser: users) {
 			if(roomMatesAddedByOthers.contains(newUser)) {
-				throw new RuntimeException("cannot add room mate" + " mobileNo " + newUser.getCompositeKey().getMobileNo() + " addedBy " 
+				throw new IllegalArgumentException("cannot add room mate" + " mobileNo " + newUser.getCompositeKey().getMobileNo() + " addedBy " 
 			+ newUser.getCompositeKey().getAddedBy() + "for user " + mobileNo);
 			}
 		}
@@ -82,7 +81,13 @@ public class BasicUserService implements UserService {
 		/* finding all the users who added current user as room mate */
 		final List<User> roomMatesWhoAddedCurrentUserAsRommmate = repository.findByCompositeKeyMobileNoAndCompositeKeyAddedByNot(mobileNo, mobileNo);
 		for(final User otherUser: roomMatesWhoAddedCurrentUserAsRommmate) {
-			roomMates.add(repository.findByCompositeKeyMobileNoAndCompositeKeyAddedBy(otherUser.getCompositeKey().getAddedBy(), otherUser.getCompositeKey().getAddedBy()));
+			final CompositeKey key = new CompositeKey();
+	        key.setMobileNo(otherUser.getCompositeKey().getAddedBy());
+	        key.setAddedBy(otherUser.getCompositeKey().getAddedBy());
+			Optional<User> findById = repository.findById(key);
+			if(findById.isPresent()) {
+				roomMates.add(findById.get());
+			}
 		}
 		
 		return roomMates;

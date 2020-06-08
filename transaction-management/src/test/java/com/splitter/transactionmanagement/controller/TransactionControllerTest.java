@@ -92,14 +92,14 @@ public class TransactionControllerTest extends AbstractIntegrationTest {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken());
-		HttpEntity getRoomMateEntity = new HttpEntity(headers);
-		final ResponseEntity<List<TransactionVO>> responseForOwedBy = this.restTemplate.exchange(getBaseUrl() + "/api/transaction?owedBy={owedBy}&owedTo={owedTo}",
+		HttpEntity<?> getRoomMateEntity = new HttpEntity<>(headers);
+		final ResponseEntity<List<TransactionVO>> responseForOwedBy = this.restTemplate.exchange(getBaseUrl() + "/api/v1/transaction?owedBy={owedBy}&owedTo={owedTo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<TransactionVO>>() {
 				},
 				user1, null);
 		assertEquals("owed transactions did not match", 2, responseForOwedBy.getBody().size());
 		
-		final ResponseEntity<List<TransactionVO>> responseForOwedTo = this.restTemplate.exchange(getBaseUrl() + "/api/transaction?owedBy={owedBy}&owedTo={owedTo}",
+		final ResponseEntity<List<TransactionVO>> responseForOwedTo = this.restTemplate.exchange(getBaseUrl() + "/api/v1/transaction?owedBy={owedBy}&owedTo={owedTo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<TransactionVO>>() {
 				},
 				null, user1);

@@ -38,7 +38,7 @@ public class UserAuthentication implements Authentication {
         return authenticated;
     }
 
-    public void setAuthenticated(final boolean authenticated) throws IllegalArgumentException {
+    public void setAuthenticated(final boolean authenticated) {
         this.authenticated = authenticated;
     }
 

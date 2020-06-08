@@ -97,7 +97,7 @@ export class EventControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<EventVO>(`${this.basePath}/api/event`,
+        return this.httpClient.post<EventVO>(`${this.basePath}/api/v1/event`,
             eventRequest,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -151,7 +151,7 @@ export class EventControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<EventVO>>(`${this.basePath}/api/event`,
+        return this.httpClient.get<Array<EventVO>>(`${this.basePath}/api/v1/event`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -198,7 +198,7 @@ export class EventControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<EventVO>(`${this.basePath}/api/event/${encodeURIComponent(String(eventId))}`,
+        return this.httpClient.get<EventVO>(`${this.basePath}/api/v1/event/${encodeURIComponent(String(eventId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

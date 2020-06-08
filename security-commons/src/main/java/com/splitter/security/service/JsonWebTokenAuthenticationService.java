@@ -46,10 +46,7 @@ public class JsonWebTokenAuthenticationService implements TokenAuthenticationSer
         	if( ! expiryDate.after(new Date())) {
         		return null;
         	}
-        	UserDetails user = getUserFromToken(tokenData);
-            if (user != null) {
-                return new UserAuthentication(user);
-            }
+            return new UserAuthentication(getUserFromToken(tokenData));
         }
         return null;
     }
@@ -69,18 +66,18 @@ public class JsonWebTokenAuthenticationService implements TokenAuthenticationSer
     private UserDetails getUserFromToken(final Jws<Claims> tokenData) {
         try {
         	String userName = tokenData.getBody().get("username").toString();
-        	List<String> object = (List) tokenData.getBody().get("authorities");
+        	@SuppressWarnings({ "rawtypes", "unchecked" })
+			List<String> object = (List) tokenData.getBody().get("authorities");
         	final List<Authority> authorities = new ArrayList<>();
         	for(String authority: object) {
         		authorities.add(Authority.valueOf(authority));
         	}
-			JWTUserDetails userDetails = new JWTUserDetails(authorities,
+			return new JWTUserDetails(authorities,
 					userName,
 					 (boolean)tokenData.getBody().get("accountNonExpired"), 
 					 (boolean)tokenData.getBody().get("accountNonLocked"), 
 					 (boolean)tokenData.getBody().get("credentialsNonExpired"), 
 					 (boolean)tokenData.getBody().get("enabled"));
-            return userDetails;
         } catch (UsernameNotFoundException e) {
             throw new UserNotFoundException("User "
                     + tokenData.getBody().get("username").toString() + " not found");

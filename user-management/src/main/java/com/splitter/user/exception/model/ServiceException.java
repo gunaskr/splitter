@@ -5,7 +5,7 @@ public class ServiceException extends RuntimeException {
 
     private static final long serialVersionUID = -8658131859261427602L;
 
-    private String service;
+    private final String service;
 
     public ServiceException(final String service) {
         super();
@@ -25,9 +25,5 @@ public class ServiceException extends RuntimeException {
 
     public String getService() {
         return service;
-    }
-
-    public void setService(final String service) {
-        this.service = service;
     }
 }

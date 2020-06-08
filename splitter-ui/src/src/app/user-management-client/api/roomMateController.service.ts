@@ -18,8 +18,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { RoomMateDTO } from '../model/roomMateDTO';
 import { User } from '../model/user';
+import { UserDTO } from '../model/userDTO';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class RoomMateControllerService {
 
-    protected basePath = 'https://localhost:57057';
+    protected basePath = 'https://localhost:8090/user-management';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -64,10 +64,10 @@ export class RoomMateControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createRoomMatesUsingPOST(roomMates: Array<RoomMateDTO>, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
-    public createRoomMatesUsingPOST(roomMates: Array<RoomMateDTO>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
-    public createRoomMatesUsingPOST(roomMates: Array<RoomMateDTO>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
-    public createRoomMatesUsingPOST(roomMates: Array<RoomMateDTO>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createRoomMatesUsingPOST(roomMates: Array<UserDTO>, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
+    public createRoomMatesUsingPOST(roomMates: Array<UserDTO>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
+    public createRoomMatesUsingPOST(roomMates: Array<UserDTO>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
+    public createRoomMatesUsingPOST(roomMates: Array<UserDTO>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (roomMates === null || roomMates === undefined) {
             throw new Error('Required parameter roomMates was null or undefined when calling createRoomMatesUsingPOST.');
@@ -98,7 +98,7 @@ export class RoomMateControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<Array<User>>(`${this.basePath}/api/roommate`,
+        return this.httpClient.post<Array<User>>(`${this.basePath}/api/v1/roommate`,
             roomMates,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -150,7 +150,7 @@ export class RoomMateControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete<any>(`${this.basePath}/api/roommate/${encodeURIComponent(String(mobileNo))}/${encodeURIComponent(String(addedBy))}`,
+        return this.httpClient.delete<any>(`${this.basePath}/api/v1/roommate/${encodeURIComponent(String(mobileNo))}/${encodeURIComponent(String(addedBy))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -196,7 +196,7 @@ export class RoomMateControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<User>>(`${this.basePath}/api/roommate/${encodeURIComponent(String(mobileNo))}`,
+        return this.httpClient.get<Array<User>>(`${this.basePath}/api/v1/roommate/${encodeURIComponent(String(mobileNo))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -92,7 +92,7 @@ export class TransactionControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete<any>(`${this.basePath}/api/transaction/${encodeURIComponent(String(transactionId))}`,
+        return this.httpClient.delete<any>(`${this.basePath}/api/v1/transaction/${encodeURIComponent(String(transactionId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -145,7 +145,7 @@ export class TransactionControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<TransactionVO>>(`${this.basePath}/api/transaction`,
+        return this.httpClient.get<Array<TransactionVO>>(`${this.basePath}/api/v1/transaction`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

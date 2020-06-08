@@ -9,9 +9,6 @@ public class TokenDTO implements Serializable {
 
     private String token;
 
-    public TokenDTO() {
-    }
-
     public String getToken() {
         return token;
     }

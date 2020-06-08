@@ -5,19 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.bson.types.ObjectId;
-import org.hibernate.validator.constraints.ModCheck;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.splitter.transactionmanagement.AbstractIntegrationTest;
 import com.splitter.transactionmanagement.controller.dto.EventVO;
@@ -90,12 +84,12 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken());
-		final RequestEntity<EventVO> request = RequestEntity.post(new URI(getBaseUrl() + "/api/event"))
+		final RequestEntity<EventVO> request = RequestEntity.post(new URI(getBaseUrl() + "/api/v1/event"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("x-auth-token", getToken())
 				.body(eventRequest);
-		final ResponseEntity<EventVO> response = this.restTemplate.exchange(getBaseUrl() + "/api/event",
+		final ResponseEntity<EventVO> response = this.restTemplate.exchange(getBaseUrl() + "/api/v1/event",
 				HttpMethod.POST, request, new ParameterizedTypeReference<EventVO>() {
 				});
 		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
@@ -167,8 +161,8 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		String token = getToken();
 		headers.add("x-auth-token", token);
 		Mockito.when(userManagementClient.getRoomMates("test", token)).thenReturn(users);
-		HttpEntity entityWithHeader = new HttpEntity(headers);
-		final ResponseEntity<EventVO> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/event/{eventId}",
+		HttpEntity<?> entityWithHeader = new HttpEntity<>(headers);
+		final ResponseEntity<EventVO> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/v1/event/{eventId}",
 				HttpMethod.GET, entityWithHeader, new ParameterizedTypeReference<EventVO>() {
 				},
 				savedEvent1.getId());
@@ -177,29 +171,11 @@ public class EventControllerTest extends AbstractIntegrationTest {
 		assertEquals("mobile no is not same", "1", responseGet.getBody().getUser().getMobileNo());
 		assertEquals("transaction size is not ame", 2, responseGet.getBody().getTransactions().size());
 		
-		final ResponseEntity<List<EventVO>> responseFilter = this.restTemplate.exchange(getBaseUrl() + "/api/event?fromUserId={fromUserId}&toUserId={toUserId}",
+		final ResponseEntity<List<EventVO>> responseFilter = this.restTemplate.exchange(getBaseUrl() + "/api/v1/event?fromUserId={fromUserId}&toUserId={toUserId}",
 				HttpMethod.GET, entityWithHeader, new ParameterizedTypeReference<List<EventVO>>() {
 				},
 				user1, user1);
 		assertTrue(responseFilter.getStatusCode().equals(HttpStatus.OK));
 		assertEquals("events size is not same", 2, responseFilter.getBody().size());
-	}
-	
-	@Test
-	public void testTimeSaving() {
-		Event event1 = new Event();
-		event1.setAmountSpent(BigDecimal.valueOf(100));
-		event1.setCategory(CategoryType.FOOD);
-		event1.setUserId("1");
-		event1.setName("event1");
-		LocalDateTime testTime = LocalDateTime.now();
-		event1.setCreatedAt(testTime);
-		
-		Event savedEntity = eventRepository.save(event1);
-		
-		Optional<Event> findById = eventRepository.findById(savedEntity.getId());
-		
-		assertTrue("item not present", findById.isPresent());
-		assertTrue("dates dont match", findById.get().getCreatedAt().isEqual(testTime));
 	}
 }

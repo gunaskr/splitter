@@ -1,5 +1,5 @@
 export * from './grantedAuthority';
 export * from './loginDTO';
-export * from './roomMateDTO';
+export * from './tokenDTO';
 export * from './user';
 export * from './userDTO';

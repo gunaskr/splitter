@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { User } from '../model/user';
 import { UserDTO } from '../model/userDTO';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -27,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class SignUpControllerService {
 
-    protected basePath = 'https://localhost:57057';
+    protected basePath = 'https://localhost:8090/user-management';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -63,9 +64,9 @@ export class SignUpControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public signUpUsingPOST(dto: UserDTO, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public signUpUsingPOST(dto: UserDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public signUpUsingPOST(dto: UserDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public signUpUsingPOST(dto: UserDTO, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public signUpUsingPOST(dto: UserDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public signUpUsingPOST(dto: UserDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
     public signUpUsingPOST(dto: UserDTO, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (dto === null || dto === undefined) {
@@ -97,7 +98,7 @@ export class SignUpControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<any>(`${this.basePath}/api/signup`,
+        return this.httpClient.post<User>(`${this.basePath}/api/v1/signup`,
             dto,
             {
                 withCredentials: this.configuration.withCredentials,

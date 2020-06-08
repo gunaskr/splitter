@@ -25,7 +25,12 @@ public class EventToEventVO implements Converter<Event, EventVO> {
 		final EventVO target = new EventVO();
 		target.setAmountSpent(source.getAmountSpent());
 		target.setCategory(source.getCategory());
-		target.setUser(userMap.get(source.getUserId()));
+		User user = userMap.get(source.getUserId());
+		if(user == null) {
+			user = new User();
+			user.setMobileNo(source.getUserId());
+		}
+		target.setUser(user);
 		target.setName(source.getName());
 		target.setId(source.getId());
 		target.setCreatedAt(source.getCreatedAt());

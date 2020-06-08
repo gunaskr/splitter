@@ -46,7 +46,12 @@ public class EventService {
 		this.tokenHolder = tokenHolder;
 	}
 	
-	//TODO works when we use replica set @Transactional
+	/**
+	 * Creates event.
+	 * Should be transactional. However we need to setup replica set for the same.
+	 * @param eventRequest
+	 * @return created Event {@link EventVO}
+	 */
 	public EventVO createEvent(final EventVO eventRequest) {
 		final Event savedEvent = eventRepository.save(eventVOToEvent.convert(eventRequest));
 		
@@ -79,9 +84,8 @@ public class EventService {
 
 	public  List<EventVO> filterEvents(String fromUserId, String toUserId) {
 		List<Transaction> transactions = transactionRepository.findByFromUserIdOrToUserId(fromUserId, toUserId);
-		Map<String, List<Transaction>> transactionsByEventId = transactions.stream().collect(Collectors.groupingBy((t) -> {
-		 return t.getEvent().getId();
-		}));
+		Map<String, List<Transaction>> transactionsByEventId = transactions.stream()
+				.collect(Collectors.groupingBy(transaction -> transaction.getEvent().getId()));
 		final List<User> users = userManagementClient.getRoomMates((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 				, tokenHolder.getToken());
 		final List<EventVO> eventVOs = new ArrayList<>();

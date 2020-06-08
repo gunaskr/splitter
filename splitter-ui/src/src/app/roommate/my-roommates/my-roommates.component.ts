@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoomMateControllerService, User, RoomMateDTO } from '@app/user-management-client';
+import { RoomMateControllerService, User, UserDTO } from '@app/user-management-client';
 import { CredentialsService } from '@app/auth';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
@@ -35,7 +35,7 @@ export class MyRoommatesComponent implements OnInit {
       name: user ? new FormControl({value: user.username, disabled: true}) : '',
       gender: user ? new FormControl({value: user.gender, disabled: true}) : '',
       mobileNo: user ? new FormControl({value: user.mobileNo, disabled: true}) : '',
-      id: user ? user.id : ''
+      addedBy: user ? user.addedBy : ''
     });
   }
 
@@ -54,11 +54,11 @@ export class MyRoommatesComponent implements OnInit {
     });
     if (formGroupsToSave.length) {
       this.isLoading = true;
-      const roomMates: RoomMateDTO[] = [];
+      const roomMates: UserDTO[] = [];
       formGroupsToSave.forEach(formGroup => {
         roomMates.push({
           username: formGroup.value.name,
-          gender: formGroup.value.gender as RoomMateDTO.GenderEnum,
+          gender: formGroup.value.gender as UserDTO.GenderEnum,
           mobileNo: formGroup.value.mobileNo,
           addedBy: this.credentialService.credentials.username
         })

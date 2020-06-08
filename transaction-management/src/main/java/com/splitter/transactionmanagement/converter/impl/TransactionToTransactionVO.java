@@ -17,14 +17,19 @@ public class TransactionToTransactionVO implements Converter<Transaction, Transa
 
 	public TransactionToTransactionVO(List<User> users) {
 		super();
-		this.userMap = users.stream().collect(Collectors.toMap(User::getMobileNo, Function.identity()));;
+		this.userMap = users.stream().collect(Collectors.toMap(User::getMobileNo, Function.identity()));
 	}
 
 	@Override
 	public TransactionVO convert(final Transaction source) {
 		final TransactionVO transactionVO = new TransactionVO();
 		transactionVO.setAmount(source.getAmount());
-		transactionVO.setFromUser(userMap.get(source.getFromUserId()));
+		User user = userMap.get(source.getFromUserId());
+		if(user == null) {
+			user = new User();
+			user.setMobileNo(source.getFromUserId());
+		}
+		transactionVO.setFromUser(user);
 		transactionVO.setToUser(userMap.get(source.getToUserId()));
 		return transactionVO;
 	}

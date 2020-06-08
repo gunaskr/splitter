@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { RoomMateControllerService, User, RoomMateDTO } from '@app/user-management-client';
+import { RoomMateControllerService, User } from '@app/user-management-client';
 import { CredentialsService } from '@app/auth';
 import { TransactionControllerService, TransactionVO } from '@app/transaction-management-client';
 import Big from 'big.js';

@@ -21,9 +21,7 @@ export interface User {
     credentialsNonExpired?: boolean;
     enabled?: boolean;
     gender?: User.GenderEnum;
-    id?: string;
     mobileNo?: string;
-    password?: string;
     updatedAt?: string;
     username?: string;
 }

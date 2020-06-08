@@ -21,11 +21,11 @@ public class BasicUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String mobileNo) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String mobileNo) {
         final User user = userService.findUserByMobileNoAndAddedBy(mobileNo, mobileNo);
-        /* we want to capture mobileNo as user name */
-        user.setUsername(user.getCompositeKey().getMobileNo());
         if (user != null) {
+        	/* we want to capture mobileNo as user name */
+            user.setUsername(user.getCompositeKey().getMobileNo());
             return user;
         } else {
             throw new UsernameNotFoundException("User with username:" + mobileNo + " not found");

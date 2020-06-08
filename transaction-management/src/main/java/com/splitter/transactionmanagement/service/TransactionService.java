@@ -40,7 +40,7 @@ public class TransactionService {
 				 ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getUsername()
 				, tokenHolder.getToken());
 		final TransactionToTransactionVO transactionToTransactionVO = new TransactionToTransactionVO(users);
-		return transactions.stream().map(transaction -> transactionToTransactionVO.convert(transaction)).collect(Collectors.toList());
+		return transactions.stream().map(transactionToTransactionVO::convert).collect(Collectors.toList());
 	}
 
 	public void deleteTransactionById(String transactionId) {

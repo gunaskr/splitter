@@ -6,26 +6,42 @@ import com.splitter.user.model.User;
 import com.splitter.user.model.User.CompositeKey;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-
-public class UserDTOConverter implements Converter<UserDTO, User> {
+@Component
+public class UserDTOToUser implements Converter<UserDTO, User> {
+	
+	private final boolean isRoomMate;
+	
+	public UserDTOToUser(final boolean isRoomMate) {
+		this.isRoomMate = isRoomMate;
+	}
+	
+	public UserDTOToUser() {
+		this.isRoomMate = false;
+	}
 
     @Override
     public User convert(final UserDTO dto) {
         final User user = new User();
 
         user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
         user.setAccountNonExpired(false);
         user.setCredentialsNonExpired(false);
         user.setEnabled(true);
-
-        List<Authority> authorities = new ArrayList<>();
-        authorities.add(Authority.ROLE_USER);
-        user.setAuthorities(authorities);
+        if(! isRoomMate) {
+        	user.setPassword(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()));
+        	List<Authority> authorities = new ArrayList<>();
+            authorities.add(Authority.ROLE_USER);
+            user.setAuthorities(authorities);
+        } else {
+        	user.setAuthorities(Collections.emptyList());
+        }
         
         CompositeKey key = new CompositeKey();
 		key.setMobileNo(dto.getMobileNo());

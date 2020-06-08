@@ -10,9 +10,6 @@ public class LoginDTO implements Serializable {
     private String username;
     private String password;
 
-    public LoginDTO() {
-    }
-
     public String getUsername() {
         return username;
     }

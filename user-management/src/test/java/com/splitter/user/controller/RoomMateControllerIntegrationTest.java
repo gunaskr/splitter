@@ -22,7 +22,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
 import com.splitter.user.AbstractIntegrationTest;
-import com.splitter.user.dto.RoomMateDTO;
+import com.splitter.user.dto.UserDTO;
 import com.splitter.user.model.Gender;
 import com.splitter.user.model.User;
 import com.splitter.user.model.User.CompositeKey;
@@ -35,8 +35,8 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	public void testCreateRoomMates() throws URISyntaxException {
-		List<RoomMateDTO> users = new ArrayList<>();
-		RoomMateDTO user = new RoomMateDTO();
+		List<UserDTO> users = new ArrayList<>();
+		UserDTO user = new UserDTO();
 		user.setMobileNo("1");
 		user.setAddedBy("2");
 		user.setGender(Gender.FEMALE);
@@ -44,12 +44,12 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		users.add(user);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken(null));
-		final RequestEntity<List<RoomMateDTO>> request = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
+		final RequestEntity<List<UserDTO>> request = RequestEntity.post(new URI(getBaseUrl() + "/api/v1/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("x-auth-token", getToken(null))
 				.body(users);
-		final ResponseEntity<List<User>> response = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
+		final ResponseEntity<List<User>> response = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate",
 				HttpMethod.POST, request, new ParameterizedTypeReference<List<User>>() {
 				});
 		assertTrue(response.getBody().size() == 1);
@@ -68,7 +68,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		user2.setCompositeKey(key);
 		user2.setPassword("test1");
 		
-		User savedUser2 = userRepository.save(user2);
+		userRepository.save(user2);
 		
 		User user2_1 = new User();
 		CompositeKey key2_1 = new CompositeKey();
@@ -78,7 +78,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		user2_1.setGender(Gender.FEMALE);
 		user2_1.setUsername("test2_1");
 		
-		User savedUser2_1 = userRepository.save(user2_1);
+		userRepository.save(user2_1);
 		
 		User user3_2 = new User();
 		CompositeKey key3_2 = new CompositeKey();
@@ -88,7 +88,7 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		user3_2.setGender(Gender.FEMALE);
 		user3_2.setUsername("test3_2");
 		
-		User savedUser3_2 = userRepository.save(user3_2);
+		userRepository.save(user3_2);
 		
 		User user3 = new User();
 		CompositeKey key3 = new CompositeKey();
@@ -102,8 +102,8 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken(null));
-		HttpEntity getRoomMateEntity = new HttpEntity(headers);
-		final ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}",
+		HttpEntity<?> getRoomMateEntity = new HttpEntity<>(headers);
+		final ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate/{mobileNo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<User>>() {
 				},
 				user2.getCompositeKey().getMobileNo());
@@ -121,27 +121,27 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		/* add users */
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("x-auth-token", getToken(null));
-		List<RoomMateDTO> users = new ArrayList<>();
-		RoomMateDTO user = new RoomMateDTO();
+		List<UserDTO> users = new ArrayList<>();
+		UserDTO user = new UserDTO();
 		user.setMobileNo("1");
 		user.setAddedBy("2");
 		user.setGender(Gender.FEMALE);
 		user.setUsername("test");
 		users.add(user);
 		
-		final RequestEntity<List<RoomMateDTO>> addRoomMatesRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
+		final RequestEntity<List<UserDTO>> addRoomMatesRequest = RequestEntity.post(new URI(getBaseUrl() + "/api/v1/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("x-auth-token", getToken(null))
 				.body(users);
-		final ResponseEntity<List<User>> addRoomMatesResponse = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
+		final ResponseEntity<List<User>> addRoomMatesResponse = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate",
 				HttpMethod.POST, addRoomMatesRequest, new ParameterizedTypeReference<List<User>>() {
 				});
 		assertTrue("adding users failed", addRoomMatesResponse.getStatusCode().equals(HttpStatus.OK));
 		
 		/* check for room mate is present */
-		HttpEntity getRoomMateEntity = new HttpEntity(headers);
-		ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}",
+		HttpEntity<?> getRoomMateEntity = new HttpEntity<>(headers);
+		ResponseEntity<List<User>> responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate/{mobileNo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<User>>() {
 				},
 				"2");
@@ -149,14 +149,14 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		assertTrue(responseGet.getBody().size() == 1);
 		
 		/* delete the roomMate */
-		final ResponseEntity<List<User>> responseDelete = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}/{addedBy}",
+		final ResponseEntity<List<User>> responseDelete = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate/{mobileNo}/{addedBy}",
 				HttpMethod.DELETE, getRoomMateEntity, new ParameterizedTypeReference<List<User>>() {
 				},
 				"1","2");
 		assertTrue(responseDelete.getStatusCode().equals(HttpStatus.OK));
 		
 		/* check for the room mate */
-		responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/roommate/{mobileNo}",
+		responseGet = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate/{mobileNo}",
 				HttpMethod.GET, getRoomMateEntity, new ParameterizedTypeReference<List<User>>() {
 				},
 				"2");
@@ -189,8 +189,8 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 	    
 		this.userRepository.saveAll(Arrays.asList(user1, user2, user1_2));
 		
-		List<RoomMateDTO> users = new ArrayList<>();
-		RoomMateDTO user = new RoomMateDTO();
+		List<UserDTO> users = new ArrayList<>();
+		UserDTO user = new UserDTO();
 		user.setMobileNo("1");
 		user.setAddedBy("2");
 		user.setUsername("user2_1");
@@ -198,12 +198,12 @@ public class RoomMateControllerIntegrationTest extends AbstractIntegrationTest {
 		HttpHeaders headers = new HttpHeaders();
 		String token = getToken("2");
 		headers.add("x-auth-token", token);
-		final RequestEntity<List<RoomMateDTO>> request = RequestEntity.post(new URI(getBaseUrl() + "/api/roommate"))
+		final RequestEntity<List<UserDTO>> request = RequestEntity.post(new URI(getBaseUrl() + "/api/v1/roommate"))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("x-auth-token", token)
 				.body(users);
-		final ResponseEntity<String> response = this.restTemplate.exchange(getBaseUrl() + "/api/roommate",
+		final ResponseEntity<String> response = this.restTemplate.exchange(getBaseUrl() + "/api/v1/roommate",
 				HttpMethod.POST, request, new ParameterizedTypeReference<String>() {
 				});
 		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));

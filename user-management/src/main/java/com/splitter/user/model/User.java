@@ -31,6 +31,7 @@ public class User implements UserDetails, Serializable {
     private String createdAt;
     private String updatedAt;
     
+    @JsonIgnore
     public CompositeKey getCompositeKey() {
 		return compositeKey;
 	}
@@ -127,6 +128,14 @@ public class User implements UserDetails, Serializable {
 		this.gender = gender;
 	}
 	
+	public String getMobileNo() {
+		return compositeKey.getMobileNo();
+	}
+
+	public String getAddedBy() {
+		return compositeKey.getAddedBy();
+	}
+	
 	public static class CompositeKey implements Serializable {
 		/**
 		 * 
@@ -169,19 +178,15 @@ public class User implements UserDetails, Serializable {
 			if (getClass() != obj.getClass())
 				return false;
 			CompositeKey other = (CompositeKey) obj;
-			if (addedBy == null) {
-				if (other.addedBy != null)
-					return false;
+			if (addedBy == null && other.addedBy != null) {
+				return false;
 			} 
-			if (mobileNo == null) {
-				if (other.mobileNo != null)
-					return false;
+			if (mobileNo == null && other.mobileNo != null) {
+				return false;
 			}
-			if(addedBy.equals(other.mobileNo) && mobileNo.equals(other.addedBy)) {
-				return true;
-			}
-			if(addedBy.equals(other.addedBy) && mobileNo.equals(other.mobileNo)) {
-				return true;
+			if(null != addedBy && null != mobileNo) {
+				return (addedBy.equals(other.mobileNo) && mobileNo.equals(other.addedBy))
+						|| (addedBy.equals(other.addedBy) && mobileNo.equals(other.mobileNo));
 			}
 			return false;
 		}
@@ -208,8 +213,9 @@ public class User implements UserDetails, Serializable {
 		if (compositeKey == null) {
 			if (other.compositeKey != null)
 				return false;
-		} else if (!compositeKey.equals(other.compositeKey))
+		} else if (! compositeKey.equals(other.compositeKey)) {
 			return false;
+		}
 		return true;
 	}
 	

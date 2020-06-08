@@ -3,7 +3,6 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { CategoryControllerService } from './api/categoryController.service';
 import { EventControllerService } from './api/eventController.service';
 import { TransactionControllerService } from './api/transactionController.service';
 
@@ -12,7 +11,6 @@ import { TransactionControllerService } from './api/transactionController.servic
   declarations: [],
   exports:      [],
   providers: [
-    CategoryControllerService,
     EventControllerService,
     TransactionControllerService ]
 })

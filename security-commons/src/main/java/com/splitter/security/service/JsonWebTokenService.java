@@ -26,7 +26,6 @@ public class JsonWebTokenService implements TokenService {
         Map<String, Object> tokenData = new HashMap<>();
 
         tokenData.put("clientType", "user");
-        //tokenData.put("userID", user.getId());
         tokenData.put("username", user.getUsername());
         tokenData.put("authorities", user.getAuthorities());
         tokenData.put("accountNonExpired", user.isAccountNonExpired());
