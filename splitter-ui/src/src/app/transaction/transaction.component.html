@@ -1,114 +1,130 @@
 <app-loader [isLoading]="isLoading"></app-loader>
 <ng-template #content let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title">Amount Mismatch</h4>
-    </div>
-    <div class="modal-body">
-        <p>The amount requested from all room mates, doesn't match the total amount. Are you sure, you want to continue?</p>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-sm" (click)="modal.close('continue')">Continue</button>
-        &nbsp;&nbsp;
-        <button type="button" class="btn btn-danger btn-sm" (click)="modal.close('cancel')">Cancel</button>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Amount Mismatch</h4>
+  </div>
+  <div class="modal-body">
+    <p>The amount requested from all room mates, doesn't match the total amount. Are you sure, you want to continue?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('continue')">Continue</button>
+    &nbsp;&nbsp;
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.close('cancel')">Cancel</button>
+  </div>
 </ng-template>
 <div class="container">
-    <h2><span *ngIf="! eventId">Add New</span><span *ngIf="eventId">Edit</span> Transaction</h2>
-    <div *ngIf="eventForm" class="transaction__form" [formGroup]="eventForm">
-        <div class="form-group row">
-            <label for="expenseCategory" class="col-sm-2 col-form-label">Expense Category</label>
-            <div class="col-sm-6">
-                <select class="form-control" id="expenseCategory" formControlName="category">
-                    <option value="TRAVEL">TRAVEL</option>
-                    <option value="FOOD">FOOD</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="expenseDetails" class="col-sm-2 col-form-label">Expense Details</label>
-            <div class="col-sm-6">
-                <textarea class="form-control" id="expenseDetails" rows="3" formControlName="name"></textarea>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="transactionDate" class="col-sm-2 col-form-label">Transaction Date</label>
-            <div class="col-sm-6">
-                <div class="row" style="margin-left: unset;">
-                <input type="transactionDate" id="business_incorp_date" 
-                class="form-control col-sm-8" ngbDatepicker
-                    #transactionDatePicker="ngbDatepicker" formControlName="transactionDate" (click)="transactionDatePicker.toggle()">
-                        <ngb-timepicker class="col-sm-4" formControlName="transactionTime" ></ngb-timepicker>
-                    </div>
-            </div>
-                
-        </div>
-        <div class="form-group row">
-            <label for="amountSpent" class="col-sm-2 col-form-label">Total Amount</label>
-            <div class="col-sm-6">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" formControlName="amountSpent">
-                    <div class="input-group-append">
-                        <span class="input-group-text">.00</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="amountSpent" class="col-sm-2 col-form-label">Split Equaly</label>
-            <div class="col-sm-6">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" [disabled]="eventForm.get('amountSpent').invalid" (change)="onChangeSplitOption($event)"  class="custom-control-input" id="customSwitch1">
-                    <label class="custom-control-label" for="customSwitch1"></label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 offset-sm-2">
-                <table formArrayName="transactions" class="table table-bordered table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let user of eventForm?.controls?.transactions?.controls; index as i"
-                            [formGroupName]="i">
-                            <td formGroupName="fromUser">
-                                <select class="form-control" id="expenseCategory" formControlName="mobileNo">
-                                    <option *ngFor="let user of users" [value]="user.mobileNo">{{user.username}}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="text" class="form-control" formControlName="amount">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">.00</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <i class="fa fa-times-circle transaction__icon" (click)="removeTransaction(i)"></i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <i class="fa fa-plus-circle transaction__icon" (click)="addTransaction()" aria-hidden="true"></i>
-                        </tr>
-                    </tbody>
-                </table>
-                
-            </div>
-        </div>
-        <div class="row">
-            <button type="button" class="btn btn-primary col-sm-2" [disabled]="eventForm.pristine || eventForm.invalid" (click)="validateAndSaveExpense()">Save Expense</button>
-            &nbsp;&nbsp;
-            <button type="button" class="btn btn-secondary col-sm-2" (click)="eventForm.reset()">Reset</button>
-        </div>
+  <h2><span *ngIf="!eventId">Add New</span><span *ngIf="eventId">Edit</span> Transaction</h2>
+  <div *ngIf="eventForm" class="transaction__form" [formGroup]="eventForm">
+    <div class="form-group row">
+      <label for="expenseCategory" class="col-sm-2 col-form-label">Expense Category</label>
+      <div class="col-sm-6">
+        <select class="form-control" id="expenseCategory" formControlName="category">
+          <option value="TRAVEL">TRAVEL</option>
+          <option value="FOOD">FOOD</option>
+        </select>
+      </div>
     </div>
+    <div class="form-group row">
+      <label for="expenseDetails" class="col-sm-2 col-form-label">Expense Details</label>
+      <div class="col-sm-6">
+        <textarea class="form-control" id="expenseDetails" rows="3" formControlName="name"></textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="transactionDate" class="col-sm-2 col-form-label">Transaction Date</label>
+      <div class="col-sm-6">
+        <div class="row transaction__date">
+          <input
+            type="transactionDate"
+            id="business_incorp_date"
+            class="form-control col-sm-8"
+            ngbDatepicker
+            #transactionDatePicker="ngbDatepicker"
+            formControlName="transactionDate"
+            (click)="transactionDatePicker.toggle()"
+          />
+          <ngb-timepicker class="col-sm-4" formControlName="transactionTime"></ngb-timepicker>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="amountSpent" class="col-sm-2 col-form-label">Total Amount</label>
+      <div class="col-sm-6">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input type="text" class="form-control" formControlName="amountSpent" />
+          <div class="input-group-append">
+            <span class="input-group-text">.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="amountSpent" class="col-sm-2 col-form-label">Split Equaly</label>
+      <div class="col-sm-6">
+        <div class="custom-control custom-switch">
+          <input
+            type="checkbox"
+            [disabled]="eventForm.get('amountSpent').invalid"
+            (change)="onChangeSplitOption($event)"
+            class="custom-control-input"
+            id="customSwitch1"
+          />
+          <label class="custom-control-label" for="customSwitch1"></label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 offset-sm-2">
+        <table formArrayName="transactions" class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of eventForm?.controls?.transactions?.controls; index as i" [formGroupName]="i">
+              <td formGroupName="fromUser">
+                <select class="form-control" id="expenseCategory" formControlName="mobileNo">
+                  <option *ngFor="let user of users" [value]="user.mobileNo">{{ user.username }}</option>
+                </select>
+              </td>
+              <td>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" formControlName="amount" />
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <i class="fa fa-times-circle transaction__icon" (click)="removeTransaction(i)"></i>
+              </td>
+            </tr>
+            <tr>
+              <i class="fa fa-plus-circle transaction__icon" (click)="addTransaction()" aria-hidden="true"></i>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <button
+        type="button"
+        class="btn btn-primary col-sm-2"
+        [disabled]="eventForm.pristine || eventForm.invalid"
+        (click)="validateAndSaveExpense()"
+      >
+        Save Expense
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" class="btn btn-secondary col-sm-2" (click)="eventForm.reset()">Reset</button>
+    </div>
+  </div>
 </div>

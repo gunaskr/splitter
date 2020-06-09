@@ -16,9 +16,9 @@ import { AboutModule } from './about/about.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BASE_PATH as BASE_PATH_USER_MANAGEMENT } from './user-management-client/variables';
-import { ApiModule  as ApiModuleUserManagement } from './user-management-client/api.module';
+import { ApiModule as ApiModuleUserManagement } from './user-management-client/api.module';
 import { BASE_PATH as BASE_PATH_TRANSACTION_MANAGEMENT } from './transaction-management-client/variables';
-import { ApiModule  as ApiModuleTransactionManagement } from './transaction-management-client/api.module';
+import { ApiModule as ApiModuleTransactionManagement } from './transaction-management-client/api.module';
 import { RoommateModule } from './roommate/roommate.module';
 import { TransactionModule } from './transaction/transaction.module';
 
@@ -46,12 +46,12 @@ import { TransactionModule } from './transaction/transaction.module';
   providers: [
     {
       provide: BASE_PATH_USER_MANAGEMENT,
-      useValue: 'user-management'
+      useValue: 'user-management',
     },
     {
       provide: BASE_PATH_TRANSACTION_MANAGEMENT,
-      useValue: 'transaction-management'
-    }
+      useValue: 'transaction-management',
+    },
   ],
   bootstrap: [AppComponent],
 })

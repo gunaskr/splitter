@@ -1,38 +1,46 @@
 <div class="row">
-    <div class="col-sm-6">
-      <div class="home__owe col-sm-4 offset-sm-4" [ngClass]= "{'home__owe--credit': transactionType === 'fromUser'}">
-        <span *ngIf="transactionType === 'toUser'" class="home__owe__text">YOU OWE</span>
-        <span *ngIf="transactionType === 'fromUser'" class="home__owe__text">OWE YOU</span>
-        <hr>
-        <span class="home__owe__amount">{{totalAmount | currency}}</span>
-      </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="panel panel-primary" id="result_panel">
-        <div class="panel-heading">
-          <h5 class="panel-title">Roommates 
-              <span *ngIf="transactionType === 'toUser'">YOU OWE</span>
-              <span *ngIf="transactionType === 'fromUser'">OWE YOU</span></h5>
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let transaction of transactions">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="col">
-                  <i class="fas" 
-                  [ngClass]= "{'fa-male': transaction[transactionType].gender === 'MALE', 'fa-female': transaction[transactionType].gender === 'FEMALE'}"
-                  ></i>
-                  <span> {{ transaction[transactionType].username }}</span>
-                  <p class="list-group__subscript"><small class="text-muted">{{ transaction[transactionType].mobileNo | phoneNumber }}</small></p>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                {{transaction.amount | currency }}
-              </div>
-              <i routerLink="/transactions" class="col-sm-1 offset-sm-1 fas fa-ellipsis-v"></i>
-            </div>
-          </li>
-        </ul>
-      </div>
+  <div class="col-sm-6">
+    <div class="home__owe col-sm-4 offset-sm-4" [ngClass]="{ 'home__owe--credit': transactionType === 'fromUser' }">
+      <span *ngIf="transactionType === 'toUser'" class="home__owe__text">YOU OWE</span>
+      <span *ngIf="transactionType === 'fromUser'" class="home__owe__text">OWE YOU</span>
+      <hr />
+      <span class="home__owe__amount">{{ totalAmount | currency }}</span>
     </div>
   </div>
+  <div class="col-sm-6">
+    <div class="panel panel-primary" id="result_panel">
+      <div class="panel-heading">
+        <h5 class="panel-title">
+          Roommates
+          <span *ngIf="transactionType === 'toUser'">YOU OWE</span>
+          <span *ngIf="transactionType === 'fromUser'">OWE YOU</span>
+        </h5>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let transaction of transactions">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="col">
+                <i
+                  class="fas"
+                  [ngClass]="{
+                    'fa-male': transaction[transactionType].gender === 'MALE',
+                    'fa-female': transaction[transactionType].gender === 'FEMALE'
+                  }"
+                ></i>
+                <span> {{ transaction[transactionType].username }}</span>
+                <p class="list-group__subscript">
+                  <small class="text-muted">{{ transaction[transactionType].mobileNo | phoneNumber }}</small>
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              {{ transaction.amount | currency }}
+            </div>
+            <i routerLink="/transactions" class="col-sm-1 offset-sm-1 fas fa-ellipsis-v"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

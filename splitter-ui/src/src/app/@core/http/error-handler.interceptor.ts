@@ -16,8 +16,7 @@ const log = new Logger('ErrorHandlerInterceptor');
   providedIn: 'root',
 })
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-
-  constructor(private router: Router){}
+  constructor(private router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError((error) => this.errorHandler(error)));
@@ -27,7 +26,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   private errorHandler(response: HttpEvent<any>): Observable<HttpEvent<any>> {
     if (!environment.production) {
       // Do something with the error
-      if((response as any).status === 401 || (response as any).status === 403){
+      if ((response as any).status === 401 || (response as any).status === 403) {
         this.router.navigate(['/login'], { replaceUrl: true });
       }
       log.error('Request error', response);

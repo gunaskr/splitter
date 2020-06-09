@@ -7,8 +7,7 @@ const credentialsKey = 'credentials';
   providedIn: 'root',
 })
 export class TokenInterceptor implements HttpInterceptor {
-
- constructor() {}
+  constructor() {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
@@ -16,8 +15,8 @@ export class TokenInterceptor implements HttpInterceptor {
       const credentials = JSON.parse(savedCredentials);
       request = request.clone({
         setHeaders: {
-          'x-auth-token': `${credentials.token}`
-        }
+          'x-auth-token': `${credentials.token}`,
+        },
       });
     }
     return next.handle(request);

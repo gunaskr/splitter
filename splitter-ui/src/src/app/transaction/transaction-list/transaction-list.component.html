@@ -1,9 +1,9 @@
 <div class="container transactions">
   <h2>Transactions</h2>
-  <br>
+  <br />
   <h3 class="transactions__heading">{{ userMobileNo }}</h3>
   <div class="splitter__container">
-    <br>
+    <br />
     <table class="transactions__table col-sm-10 offset-sm-1 table table-bordered">
       <thead>
         <tr>
@@ -19,11 +19,18 @@
         <ng-container *ngFor="let event of events; index as i">
           <tr>
             <td>
-              <i *ngIf=" ! showRow(i)" class="fa fa-plus-circle transactions__icon" (click)="expandRow(i)"
-                aria-hidden="true"></i>
+              <i
+                *ngIf="!showRow(i)"
+                class="fa fa-plus-circle transactions__icon"
+                (click)="expandRow(i)"
+                aria-hidden="true"
+              ></i>
               <i *ngIf="showRow(i)" class="fas fa-minus-circle transactions__icon" (click)="expandRow(i)"></i>
             </td>
-            <td><span>{{event.user.username}}</span><span>{{ event.user.mobileNo | phoneNumber }}</span></td>
+            <td>
+              <span>{{ event.user.username }}</span
+              ><span>{{ event.user.mobileNo | phoneNumber }}</span>
+            </td>
             <td>{{ event.category }}</td>
             <td>{{ event.createdAt | date }}</td>
             <td>{{ event.amountSpent | currency }}</td>
@@ -34,18 +41,21 @@
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">{{event.name}}</h5>
+                    <h5 class="card-title">{{ event.name }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Participants</h6>
                     <ul class="list-group list-group-flush">
                       <ng-container *ngFor="let transaction of event.transactions">
-                        <li class="list-group-item" [ngClass]="{'active' : isCurrentUser(transaction.fromUser.mobileNo)}"
-                          *ngIf="!(transaction.fromUser.mobileNo === event.user.mobileNo)">
+                        <li
+                          class="list-group-item"
+                          [ngClass]="{ active: isCurrentUser(transaction.fromUser.mobileNo) }"
+                          *ngIf="!(transaction.fromUser.mobileNo === event.user.mobileNo)"
+                        >
                           <div class="row">
                             <div class="col-sm-6">
-                              {{transaction.fromUser.username}}
+                              {{ transaction.fromUser.username }}
                             </div>
                             <div class="col-sm-4">
-                              {{transaction.amount | currency }}
+                              {{ transaction.amount | currency }}
                             </div>
                           </div>
                         </li>

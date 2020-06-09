@@ -1,17 +1,18 @@
 <app-loader [isLoading]="isLoading"></app-loader>
 <div class="container">
   <h2>My Roommates</h2>
-  <br>
+  <br />
   <div class="roommate__list splitter__container" *ngIf="usersForm" [formGroup]="usersForm">
     <div class="row">
-      <h4 class="col-sm-3" >Roommates List</h4>
-      <button type="button" class="col-sm-1 offset-sm-7 btn btn-sm btn-success" (click)="addUser()"><i
-          class="fas fa-plus"></i>Add New</button>
+      <h4 class="col-sm-3">Roommates List</h4>
+      <button type="button" class="col-sm-1 offset-sm-7 btn btn-sm btn-success" (click)="addUser()">
+        <i class="fas fa-plus"></i>Add New
+      </button>
     </div>
-    
-    <br>
-    <br>
-    <br>
+
+    <br />
+    <br />
+    <br />
     <table formArrayName="users" class="table table-bordered">
       <thead>
         <tr>
@@ -24,7 +25,7 @@
       <tbody>
         <tr *ngFor="let user of usersForm?.controls?.users?.controls; index as i" [formGroupName]="i">
           <td>
-            <input type="text" class="form-control" formControlName="name">
+            <input type="text" class="form-control" formControlName="name" />
           </td>
           <td>
             <select id="gender" class="form-control" formControlName="gender">
@@ -33,17 +34,28 @@
             </select>
           </td>
           <td>
-            <input type="text" class="form-control" formControlName="mobileNo">
+            <input type="text" class="form-control" formControlName="mobileNo" />
           </td>
           <td>
-            <i *ngIf="user.value.id" class="fas fa-edit btn disabled"></i>
+            <i *ngIf="user.value.addedBy" class="fas fa-edit btn disabled"></i>
             &nbsp;
-            <i  class="fas fa-times-circle" [ngClass]="{'btn disabled': user.value.id }" (click)="(! user.value.id) && deleteUser(i)"></i>
+            <i
+              class="fas fa-times-circle"
+              [ngClass]="{ 'btn disabled': user.value.addedBy }"
+              (click)="! user.value.addedBy && deleteUser(i)"
+            ></i>
           </td>
         </tr>
       </tbody>
     </table>
-    <br>
-    <button type="button" class="btn btn-success" [disabled]="usersForm.pristine || usersForm.invalid" (click)="saveDetails()">Save Details</button>
+    <br />
+    <button
+      type="button"
+      class="btn btn-success"
+      [disabled]="usersForm.pristine || usersForm.invalid"
+      (click)="saveDetails()"
+    >
+      Save Details
+    </button>
   </div>
 </div>

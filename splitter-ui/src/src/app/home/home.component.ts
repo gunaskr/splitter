@@ -14,34 +14,33 @@ export class HomeComponent implements OnInit {
   users: User[];
   debitTransactions: TransactionVO[];
   creditTransactions: TransactionVO[];
-  
+
   totalCreditAmount: number;
   isLoading = true;
 
   constructor(
     private credentialService: CredentialsService,
     private transactionControllerService: TransactionControllerService,
-    private roomMateControllerService: RoomMateControllerService) { }
+    private roomMateControllerService: RoomMateControllerService
+  ) {}
 
   ngOnInit() {
-    this.transactionControllerService.getTransactionsUsingGET(
-      this.credentialService.credentials.username,
-      null
-    ).subscribe(
-      debitTransactions => {
-        this.debitTransactions = debitTransactions.filter(transction => {
+    this.transactionControllerService
+      .getTransactionsUsingGET(this.credentialService.credentials.username, null)
+      .subscribe((debitTransactions) => {
+        this.debitTransactions = debitTransactions.filter((transction) => {
           return transction.toUser.mobileNo !== this.credentialService.credentials.username;
         });
-        this.transactionControllerService.getTransactionsUsingGET(null, this.credentialService.credentials.username)
-          .subscribe(creditTransactions => {
-            this.creditTransactions = creditTransactions.filter(transction => {
+        this.transactionControllerService
+          .getTransactionsUsingGET(null, this.credentialService.credentials.username)
+          .subscribe((creditTransactions) => {
+            this.creditTransactions = creditTransactions.filter((transction) => {
               return transction.fromUser.mobileNo !== this.credentialService.credentials.username;
             });
             this.totalCreditAmount = Number(this.calculateTotalAmount(this.creditTransactions).round(2));
             this.isLoading = false;
-          })
-      }
-    );
+          });
+      });
   }
 
   calculateTotalAmount(transactions: TransactionVO[]): Big {
@@ -51,7 +50,6 @@ export class HomeComponent implements OnInit {
   }
 
   getGenderIcon(user: User): string {
-    return user ? 
-    (user.gender === User.GenderEnum.FEMALE.toString() ? 'fa-female' : 'fa-male'): 'Unknown';
+    return user ? (user.gender === User.GenderEnum.FEMALE.toString() ? 'fa-female' : 'fa-male') : 'Unknown';
   }
 }

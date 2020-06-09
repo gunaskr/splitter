@@ -2,20 +2,26 @@
 <div class="home container">
   <h2>My Dashboard</h2>
   <div class="row container">
-    <label for="mobileNo" class="col-sm-2 offset-sm-5 col-form-label">Mobile Number</label>
+    <label for="mobile-no" class="col-sm-2 offset-sm-5 col-form-label">Mobile Number</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="mobileNo" placeholder="Enter Your Mobile Number">
+      <input type="text" class="form-control" id="mobile-no" placeholder="Doesn't do anything" />
     </div>
-    <button class="btn btn-success col-sm-1">GO</button>
+    <button class="btn btn-success col-sm-1 disabled">GO</button>
   </div>
-  <br>
-  
+  <br />
+
   <div class="splitter__container home__container">
-    <app-transaction-snapshot *ngIf="debitTransactions" 
-    [transactions]="debitTransactions" [transactionType]="'toUser'" ></app-transaction-snapshot>
-    <hr>
-    <app-transaction-snapshot *ngIf="creditTransactions" 
-    [transactions]="creditTransactions" [transactionType]="'fromUser'" ></app-transaction-snapshot>
+    <app-transaction-snapshot
+      *ngIf="debitTransactions"
+      [transactions]="debitTransactions"
+      [transactionType]="'toUser'"
+    ></app-transaction-snapshot>
+    <hr />
+    <app-transaction-snapshot
+      *ngIf="creditTransactions"
+      [transactions]="creditTransactions"
+      [transactionType]="'fromUser'"
+    ></app-transaction-snapshot>
   </div>
-  <br><br>
+  <br /><br />
 </div>

@@ -1,45 +1,45 @@
-.home__owe{
-    background-color: #28a745;
-    border-radius: 75%;
-    width: 150px;
-    min-height: 150px;
-    color: white;
-    font-size: medium;
-    font-weight: bold;
-    &--credit{
-      background-color: rgb(70, 154, 223);
-    }
-    span{
-      position: relative;
-      left: 21%;
-    }
-    &__text{
-      top: 25px;
-    }
-    &__amount{
-      top:25px;
-    }
-    hr{
-      position: relative;
-      top: 25px;
+.home__owe {
+  background-color: #28a745;
+  border-radius: 75%;
+  width: 150px;
+  min-height: 150px;
+  color: white;
+  font-size: medium;
+  font-weight: bold;
+  &--credit {
+    background-color: rgb(70, 154, 223);
+  }
+  span {
+    position: relative;
+    left: 21%;
+  }
+  &__text {
+    top: 25px;
+  }
+  &__amount {
+    top: 25px;
+  }
+  hr {
+    position: relative;
+    top: 25px;
+  }
+}
+.list-group {
+  max-height: 200px;
+  margin-bottom: 10px;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  &__subscript {
+    height: 15px;
+    small {
+      position: absolute;
+      bottom: 0;
     }
   }
-  .list-group{
-    max-height: 200px;
-      margin-bottom: 10px;
-      overflow:scroll;
-      -webkit-overflow-scrolling: touch;
-      &__subscript{
-        height: 15px;
-        small{
-          position: absolute;
-          bottom:0;
-        }
-      }
-      &-item{
-        padding: 1px;
-      }
-      i{
-        top: 10px;
-      }
+  &-item {
+    padding: 1px;
   }
+  i {
+    top: 10px;
+  }
+}

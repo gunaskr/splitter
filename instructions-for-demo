@@ -1,0 +1,5 @@
+instructions for demo.
+maven build all applications.
+start eureka-service, config-service ( ensure that you have instaleld github certificates in the jdk ur using), zuul-proxy in this order.
+start user-management and transaction-management services;
+login to localhost:8090( where zuul-proxy is running)

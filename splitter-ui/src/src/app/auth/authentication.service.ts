@@ -19,8 +19,10 @@ export interface LoginContext {
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private credentialsService: CredentialsService,
-    private authenticationControllerService: AuthenticationControllerService) {}
+  constructor(
+    private credentialsService: CredentialsService,
+    private authenticationControllerService: AuthenticationControllerService
+  ) {}
 
   /**
    * Authenticates the user.
@@ -29,12 +31,14 @@ export class AuthenticationService {
    */
   login(context: LoginContext): Observable<Credentials> {
     return this.authenticationControllerService
-    .authenticateUsingPOST({password: context.password, username: context.username})
-    .pipe(map((response: any) => {
-      const credentials = {username: context.username, token:response.token};
-      this.credentialsService.setCredentials(credentials, context.remember);
-      return credentials;
-    }));
+      .authenticateUsingPOST({ password: context.password, username: context.username })
+      .pipe(
+        map((response: any) => {
+          const credentials = { username: context.username, token: response.token };
+          this.credentialsService.setCredentials(credentials, context.remember);
+          return credentials;
+        })
+      );
   }
 
   /**

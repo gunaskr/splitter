@@ -5,14 +5,14 @@ import Big from 'big.js';
 @Component({
   selector: 'app-transaction-snapshot',
   templateUrl: './transaction-snapshot.component.html',
-  styleUrls: ['./transaction-snapshot.component.scss']
+  styleUrls: ['./transaction-snapshot.component.scss'],
 })
 export class TransactionSnapshotComponent implements OnInit {
   totalAmount: number;
   @Input() transactions: TransactionVO[];
   @Input() transactionType: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.totalAmount = Number(this.calculateTotalAmount(this.transactions).round(2));
@@ -23,5 +23,4 @@ export class TransactionSnapshotComponent implements OnInit {
       return p.add(new Big(c.amount));
     }, new Big(0));
   }
-
 }

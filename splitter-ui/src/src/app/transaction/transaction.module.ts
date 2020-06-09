@@ -8,16 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { SharedModule } from '@app/@shared';
 
-
 @NgModule({
   declarations: [TransactionComponent, TransactionListComponent],
-  imports: [
-    CommonModule,
-    TransactionRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbModule,
-    SharedModule
-  ]
+  imports: [CommonModule, TransactionRoutingModule, FormsModule, ReactiveFormsModule, NgbModule, SharedModule],
 })
-export class TransactionModule { }
+export class TransactionModule {}

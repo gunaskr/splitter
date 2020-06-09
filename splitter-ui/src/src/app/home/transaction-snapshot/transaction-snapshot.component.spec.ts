@@ -8,9 +8,8 @@ describe('TransactionSnapshotComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionSnapshotComponent ]
-    })
-    .compileComponents();
+      declarations: [TransactionSnapshotComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
