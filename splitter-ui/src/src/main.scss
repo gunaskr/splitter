@@ -25,3 +25,7 @@ i {
   border: 1px solid rgba(133, 212, 226, 0.877);
   box-shadow: 4px 4px 4px #ccc;
 }
+
+.ng-invalid.ng-touched:not(form) {
+  border-left: 4px solid theme-color("danger");
+}

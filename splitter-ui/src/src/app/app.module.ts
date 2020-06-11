@@ -12,7 +12,6 @@ import { SharedModule } from '@shared';
 import { AuthModule } from '@app/auth';
 import { HomeModule } from './home/home.module';
 import { ShellModule } from './shell/shell.module';
-import { AboutModule } from './about/about.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BASE_PATH as BASE_PATH_USER_MANAGEMENT } from './user-management-client/variables';
@@ -34,7 +33,6 @@ import { TransactionModule } from './transaction/transaction.module';
     SharedModule,
     ShellModule,
     HomeModule,
-    AboutModule,
     RoommateModule,
     TransactionModule,
     AuthModule,
